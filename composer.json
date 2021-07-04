@@ -11,5 +11,8 @@
             "email": "julien.tessieau@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0",
+        "nikic/fast-route": "^1.3"
+    }
 }
