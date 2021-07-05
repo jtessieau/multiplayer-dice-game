@@ -36,12 +36,18 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         // ... call $handler with $vars
+
         $controllerPath = "\\App\\Controller\\";
         $exec = explode('@',$handler);
         $controller = $controllerPath . $exec[0];
         $method = $exec[1];
 
         $call = new $controller;
-        $call->$method();
+        if (empty($vars)) {
+            $call->$method();
+        } else {
+            $params = implode(',', $vars);
+            $call->$method($params);
+        }
         break;
 }
