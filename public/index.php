@@ -3,7 +3,7 @@
 require_once "../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/', 'home');
+    $r->addRoute('GET', '/', 'Home@index');
     // $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)
     // $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
@@ -36,7 +36,12 @@ switch ($routeInfo[0]) {
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
         // ... call $handler with $vars
+        $controllerPath = "\\App\\Controller\\";
+        $exec = explode('@',$handler);
+        $controller = $controllerPath . $exec[0];
+        $method = $exec[1];
 
-        require_once "../src/" . $handler . ".php";
+        $call = new $controller;
+        $call->$method();
         break;
 }
