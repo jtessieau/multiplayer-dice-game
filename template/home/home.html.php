@@ -1,5 +1,13 @@
-<h1>Homepage</h1>
+<div class="landing-page">
 
-<p>
-    Welcome to the homepage!
-</p>
+    <div class="hero-text">
+        <div class="hero-title">
+            <h1>Multiplayer Dice Game</h1>
+        </div>
+
+        <div class="hero-button">
+            <a href="/new-game" id="new-game">Create a new game</a>
+            <a href="/join-game" id="join-game">Join a game</a>
+        </div>
+    </div>
+</div>
