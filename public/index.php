@@ -4,6 +4,7 @@ require_once "../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/', 'Home@index');
+    $r->addRoute('GET','/new-game', 'Gameboard@newGame');
     // $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)
     // $r->addRoute('GET', '/user/{id:\d+}', 'get_user_handler');
