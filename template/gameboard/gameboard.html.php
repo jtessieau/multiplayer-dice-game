@@ -46,5 +46,5 @@
     </div>
 </div>
 
-
+<script src="js/websocket.js"></script>
 <script src="js/app.js"></script>

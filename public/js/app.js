@@ -14,7 +14,7 @@ const player2Global = document.getElementById("player2Global")
 
 const diceValue = document.getElementById("dice")
 
-// Declare Classes for Game and Players.
+// Declare Classes for GameServer and Players.
 class Game {
     constructor(player1, player2) {
         this.player1 = player1
@@ -64,8 +64,8 @@ class Game {
 }
 
 class Player {
-    constructor(name) {
-        this.name = name
+    constructor() {
+        this.name = ''
         this.roundScore = 0
         this.globalScore = 0
         this.turn = false
@@ -104,6 +104,7 @@ class Player {
         }
     }
 }
+
 // Init players and game
 player1 = new Player("PLAYER 1")
 player2 = new Player("PLAYER 2")
@@ -115,9 +116,15 @@ highlightPlayer(game.currentPlayer)
 
 // Event listeners
 newGameButton.addEventListener("click", () => {
-    game.newGame()
-    updatePlayerScore()
-    highlightPlayer(game.currentPlayer)
+    // game.newGame()
+    // updatePlayerScore()
+    // highlightPlayer(game.currentPlayer)
+    let data = {
+        "event":"newGame",
+        "player_resourceId": player.id
+    }
+    console.log(data)
+    conn.send(JSON.stringify(data))
 })
 
 rollDiceButton.addEventListener("click", () => {
@@ -179,17 +186,27 @@ function highlightPlayer(nextPlayer) {
 function drawDice(diceRoll) {
     return "dice" + diceRoll
 }
+// Connect to Websocket
+const conn = new WebSocket('ws://localhost:8080')
+const player = new Player()
+
 
 // Websocket function
-
-const conn = new WebSocket('ws://localhost:8080')
-
 conn.onopen = () => {
     console.log('Connection established')
+    conn.send('hello, its me')
 };
 conn.onclose = () => {
     console.log('Connection closed')
 }
 
 conn.onmessage = (e) => {
+    let data = JSON.parse(e.data)
+    console.log(data)
+
+    if (data.event === "connexion") {
+        player.id = data.resourceId
+        console.log(player)
+    }
+
 }

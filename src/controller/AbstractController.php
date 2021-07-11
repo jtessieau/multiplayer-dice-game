@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class App
+class AbstractController
 {
     public function render(string $title, string $path, array $params = []): void
     {
@@ -18,10 +18,10 @@ class App
 
     public function randomPass(int $lenght = 5): string
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
         $result = '';
         for ($i = 0; $i < $lenght; $i++) {
-            $result .= $characters[mt_rand(0, 61)];
+            $result .= $characters[mt_rand(0, 35)];
         }
 
         return $result;
