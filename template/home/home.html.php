@@ -2,14 +2,13 @@
 
 <div class="container">
     <div class="row justify-content-center mb-5">
-        <div class="col">
+        <div class="col text-center">
             <h2>Welcome</h2>
-            <label for="playerName">Player Name</label>
-            <input type="text" name="playerName" id="playerName"
-                   value="<?php echo $player->getName(); ?>"
-                   autocomplete="off" class="form-control mb-3">
-
-            <button class="btn btn-primary" id="playerSubmit">edit</i></button>
+            <div class="inputPlayerName">
+                <span><?= $player->getName(); ?></span>
+                <input type="hidden" name="playerName" placeholder="<?= $player->getName() ?>">
+                <button class="btn btn-primary" id="playerSubmit">Edit</i></button>
+            </div>
         </div>
     </div>
 
@@ -33,27 +32,53 @@
 <script>
 
     // Edit player name
-    const usernameInput = document.querySelector('#playerName');
-    const editButton = document.querySelector('#playerSubmit');
+    const inputPlayerName = document.querySelector('.inputPlayerName input');
+    const spanPlayerName = document.querySelector('.inputPlayerName span');
+    const btnEdit = document.querySelector('.inputPlayerName button');
 
-    editButton.addEventListener('click', () => {
-            const xhr = new XMLHttpRequest();
+    btnEdit.addEventListener('click', () => {
+            if (btnEdit.innerHTML === 'Edit') {
+                btnEdit.innerHTML = 'Ok';
+                spanPlayerName.style.display = "none";
+                inputPlayerName.type = 'text';
+                inputPlayerName.focus();
 
-            let param = "username=" + usernameInput.value;
+                inputPlayerName.addEventListener('keyup', (e)=>{
+                    if (e.code === "Enter" && document.activeElement === inputPlayerName) {
+                        updatePlayerName();
+                    }
+                })
+            } else {
+                updatePlayerName()
+            }
+        });
+
+    function updatePlayerName() {
+        const xhr = new XMLHttpRequest();
+
+        if (inputPlayerName.value !== '' && inputPlayerName.placeholder !== inputPlayerName.value) {
+
+
+            let param = "username=" + inputPlayerName.value;
 
             xhr.open('POST', '/player/updateUsername', true);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    editButton.innerText = "Done"
-
+                    spanPlayerName.innerHTML = inputPlayerName.value;
+                    inputPlayerName.placeholder = inputPlayerName.value;
+                    inputPlayerName.value = '';
                 }
             }
 
             xhr.send(param);
         }
-    );
+
+        btnEdit.innerHTML = 'Edit';
+        inputPlayerName.type = 'hidden';
+        spanPlayerName.style.display = 'inline-block';
+    }
 
     // Join a game
     const joinForm = document.querySelector('#joinForm');
@@ -79,5 +104,18 @@
                 }
             });
     });
+
+
+    // Refresh $_SESSION
+
+    let session = document.querySelector('pre')
+    setInterval(() => {
+        fetch('/debug/session')
+            .then(async (response) => {
+                if (response.ok) {
+                    session.innerHTML = await response.text();
+                }
+            })
+    }, 1000);
 
 </script>

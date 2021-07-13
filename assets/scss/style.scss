@@ -1,3 +1,13 @@
 @import 'reset';
 @import 'landing';
 @import 'dice';
+
+.inputPlayerName {
+  span {
+    display: inline-block;
+    text-align: left;
+  }
+  span,input {
+    width:300px;
+  }
+}
