@@ -23,9 +23,9 @@
 
     <div class="row" id="joinForm">
         <form action="/game" method="post">
-            <input type="text" name="gameCode" id="gameCode" placeholder="Enter game code">
+            <input type="text" name="gameCode" id="inputGameId" placeholder="Enter game code">
             <div class="form-text"></div>
-            <input type="submit" class="btn btn-primary" name="game" value="Join Game" id="submitJoinForm">
+            <input type="submit" class="btn btn-primary" name="game" value="Join Game" id="btnJoin">
         </form>
 
     </div>
@@ -33,101 +33,58 @@
 </div>
 
 <script>
+    // Player Id
+    let playerId = ''
+
     // Websocket
-    const ws = new WebSocket('ws://localhost:8080');
+    const ws = new WebSocket('ws://localhost:8080')
     ws.onopen = () => {
         console.log('Connexion established')
+        let request = {
+            "action":"connexion"
+        }
+        ws.send(JSON.stringify(request));
     };
 
     ws.onmessage = (e) => {
         console.log('New message: ')
-        let data = JSON.parse(e.data)
-        console.log(data)
+        let response = JSON.parse(e.data)
+        console.log(response)
+
+        if (response.action === "playerId"){
+            playerId = response.playerId
+            let el = document.createElement('div')
+            el.innerText = playerId
+            document.querySelector('body').appendChild(el)
+        }
+
+        if (response.action === "createGame") {
+            let el = document.createElement('div')
+            el.innerText = response.game.gameId
+            document.querySelector('body').appendChild(el)
+        }
     };
 
-    // Edit player name
-    const inputPlayerName = document.querySelector('.inputPlayerName input');
-    const spanPlayerName = document.querySelector('.inputPlayerName span');
-    const btnEdit = document.querySelector('.inputPlayerName button');
-
-    btnEdit.addEventListener('click', () => {
-        if (btnEdit.innerHTML === 'Edit') {
-            btnEdit.innerHTML = 'Ok';
-            spanPlayerName.style.display = "none";
-            inputPlayerName.type = 'text';
-            inputPlayerName.focus();
-
-            inputPlayerName.addEventListener('keyup', (e) => {
-                if (e.code === "Enter" && document.activeElement === inputPlayerName) {
-                    updatePlayerName();
-                }
-            })
-        } else {
-            updatePlayerName()
+    // Dom elements
+    const btnCreate = document.querySelector('#newGameButton')
+    btnCreate.addEventListener('click', (e) => {
+        e.preventDefault()
+        let request = {
+            "action":"createGame"
         }
-    });
+        ws.send(JSON.stringify(request))
+    })
 
-    function updatePlayerName() {
-        const xhr = new XMLHttpRequest();
+    const btnJoin = document.querySelector('#btnJoin')
+    const inputGameId = document.querySelector('#inputGameId')
 
-        if (inputPlayerName.value !== '' && inputPlayerName.placeholder !== inputPlayerName.value) {
-
-
-            let param = "username=" + inputPlayerName.value;
-
-            xhr.open('POST', '/player/updateUsername', true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    spanPlayerName.innerHTML = inputPlayerName.value;
-                    inputPlayerName.placeholder = inputPlayerName.value;
-                    inputPlayerName.value = '';
-                }
-            }
-
-            xhr.send(param);
+    btnJoin.addEventListener('click', (e) => {
+        e.preventDefault()
+        let request = {
+            "action": "joinGame",
+            "gameId": inputGameId.value
         }
 
-        btnEdit.innerHTML = 'Edit';
-        inputPlayerName.type = 'hidden';
-        spanPlayerName.style.display = 'inline-block';
-    }
-
-    // Join a game
-    const joinForm = document.querySelector('#joinForm');
-    const joinButton = document.querySelector('#joinButton');
-    const gameSelector = document.querySelector('#gameSelector')
-
-    joinForm.style.display = "none";
-
-    joinButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        joinForm.style.display = "block";
-        gameSelector.style.display = "none";
-    });
-
-    const submitJoin = document.querySelector('#submitJoinForm')
-
-    submitJoin.addEventListener('click', (e) => {
-        e.preventDefault();
-        let password = document.querySelector('#gameCode');
-        let data = {
-            "method": "find_game",
-            "password": password.value
-        };
-        ws.send(JSON.stringify(data));
-    });
-
-    // Refresh $_SESSION
-    let session = document.querySelector('pre');
-    setInterval(() => {
-        fetch('/debug/session')
-            .then(async (response) => {
-                if (response.ok) {
-                    session.innerHTML = await response.text();
-                }
-            })
-    }, 1000);
-
+        ws.send(JSON.stringify(request))
+    })
 </script>
