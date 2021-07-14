@@ -16,15 +16,6 @@ class AbstractController
         require_once '../template/base.html.php';
     }
 
-    public function randomPass(int $lenght = 5): string
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-        $result = '';
-        for ($i = 0; $i < $lenght; $i++) {
-            $result .= $characters[mt_rand(0, 35)];
-        }
 
-        return $result;
-    }
 }
 

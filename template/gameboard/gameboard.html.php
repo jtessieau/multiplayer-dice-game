@@ -1,3 +1,5 @@
+<pre><?php var_dump($_SESSION) ?></pre>
+
 <div class="container mx-auto my-auto">
     <div class="row text-center mb-4 justify-content-center">
         <div class="col-4">
@@ -46,5 +48,34 @@
     </div>
 </div>
 
-<script src="js/websocket.js"></script>
 <script src="js/app.js"></script>
+
+<script>
+    // Connect to Websocket
+    const conn = new WebSocket('ws://localhost:8080')
+    const player = new Player()
+
+
+    // Websocket function
+    conn.onopen = () => {
+        console.log('Connection established');
+        const data = {
+            "method": "player_connexion",
+            "player_guid": "<?= $_SESSION['player_guid']?>",
+        };
+        conn.send();
+    }
+    conn.onclose = () => {
+        console.log('Connection closed');
+    }
+
+    conn.onmessage = (e) => {
+        let data = JSON.parse(e.data);
+        console.log(data);
+
+        if (data.event === "connexion") {
+            player.id = data.resourceId;
+            console.log(player);
+        }
+    }
+</script>

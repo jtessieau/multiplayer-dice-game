@@ -3,16 +3,16 @@ session_start();
 require_once "../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    // Home route
     $r->addRoute(['GET','POST'], '/', 'HomeController@index');
-    $r->addRoute(['GET','POST'],'/new-game', 'GameboardController@newGame');
+
+    // Game routes
+    $r->addRoute(['POST'],'/game', 'GameboardController@game');
+
+    // Ajax routes for js functions
     $r->addRoute('POST', '/player/updateUsername', 'PlayerController@updateUsername');
-    $r->addRoute('POST', '/gameboard/join', 'GameboardController@joinGame');
-    $r->addRoute('GET', '/gameboard', 'GameboardController@newGame');
 
-    $r->addRoute('GET', '/game/findGame', 'GameboardController@findGame');
-
-    //Route for debug
-
+    // Routes for debug
     $r->addRoute('GET','/debug/session', 'DebugController@getSession');
     // $r->addRoute('GET', '/users', 'get_all_users_handler');
     // {id} must be a number (\d+)

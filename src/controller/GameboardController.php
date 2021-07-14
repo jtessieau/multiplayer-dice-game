@@ -14,18 +14,23 @@ class GameboardController extends AbstractController
         $this->render('GameServer Board', 'gameboard/gameboard.html.php');
     }
 
-    public function newGame()
+    public function game()
     {
-        $this->render('GameServer Board', 'gameboard/gameboard.html.php');
+        if(!empty($_POST)) {
+            if ($_POST['game'] === 'New Game') {
+                // todo
+            }
+
+            if ($_POST['game'] === 'Join Game') {
+                // todo
+            }
+        }
+        else {
+            header('Location: /');
+        }
+
+
+        $this->render('Multiplayer Dice Game', 'gameboard/game.html.php');
     }
 
-    public function joinGame()
-    {
-        //todo: join game method.
-    }
-
-    public function findGame()
-    {
-
-    }
 }

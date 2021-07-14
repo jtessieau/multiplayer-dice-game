@@ -14,15 +14,18 @@
 
 
     <div class="row justify-content-center" id="gameSelector">
+        <form action="/game" method="post" class="d-grid">
+            <input type="submit" class="btn btn-primary mb-3" id="newGameButton" name="game" value="New Game">
+        </form>
+
         <button class="btn btn-light" id="joinButton">Join a game</button>
-        <a class="btn btn-primary" id="createButton" href="/gameboard">New game</a>
     </div>
 
     <div class="row" id="joinForm">
-        <form action="/gameboard" method="post">
+        <form action="/game" method="post">
             <input type="text" name="gameCode" id="gameCode" placeholder="Enter game code">
             <div class="form-text"></div>
-            <button type="submit" class="btn btn-primary">Join</button>
+            <input type="submit" class="btn btn-primary" name="game" value="Join Game" id="submitJoinForm">
         </form>
 
     </div>
@@ -30,6 +33,17 @@
 </div>
 
 <script>
+    // Websocket
+    const ws = new WebSocket('ws://localhost:8080');
+    ws.onopen = () => {
+        console.log('Connexion established')
+    };
+
+    ws.onmessage = (e) => {
+        console.log('New message: ')
+        let data = JSON.parse(e.data)
+        console.log(data)
+    };
 
     // Edit player name
     const inputPlayerName = document.querySelector('.inputPlayerName input');
@@ -37,21 +51,21 @@
     const btnEdit = document.querySelector('.inputPlayerName button');
 
     btnEdit.addEventListener('click', () => {
-            if (btnEdit.innerHTML === 'Edit') {
-                btnEdit.innerHTML = 'Ok';
-                spanPlayerName.style.display = "none";
-                inputPlayerName.type = 'text';
-                inputPlayerName.focus();
+        if (btnEdit.innerHTML === 'Edit') {
+            btnEdit.innerHTML = 'Ok';
+            spanPlayerName.style.display = "none";
+            inputPlayerName.type = 'text';
+            inputPlayerName.focus();
 
-                inputPlayerName.addEventListener('keyup', (e)=>{
-                    if (e.code === "Enter" && document.activeElement === inputPlayerName) {
-                        updatePlayerName();
-                    }
-                })
-            } else {
-                updatePlayerName()
-            }
-        });
+            inputPlayerName.addEventListener('keyup', (e) => {
+                if (e.code === "Enter" && document.activeElement === inputPlayerName) {
+                    updatePlayerName();
+                }
+            })
+        } else {
+            updatePlayerName()
+        }
+    });
 
     function updatePlayerName() {
         const xhr = new XMLHttpRequest();
@@ -88,27 +102,25 @@
     joinForm.style.display = "none";
 
     joinButton.addEventListener('click', (e) => {
+        e.preventDefault();
         joinForm.style.display = "block";
         gameSelector.style.display = "none";
     });
 
-    const submitJoin = document.querySelector('#joinForm button')
+    const submitJoin = document.querySelector('#submitJoinForm')
 
     submitJoin.addEventListener('click', (e) => {
         e.preventDefault();
-        fetch('/game/findGame')
-            .then(async (response) => {
-                if (response.ok) {
-                    const formText = document.querySelector('#joinForm .form-text');
-                    formText.innerText = await response.text();
-                }
-            });
+        let password = document.querySelector('#gameCode');
+        let data = {
+            "method": "find_game",
+            "password": password.value
+        };
+        ws.send(JSON.stringify(data));
     });
 
-
     // Refresh $_SESSION
-
-    let session = document.querySelector('pre')
+    let session = document.querySelector('pre');
     setInterval(() => {
         fetch('/debug/session')
             .then(async (response) => {

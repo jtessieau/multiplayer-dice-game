@@ -15,7 +15,7 @@ class GameModel extends AbstractModel
 
     public function __construct()
     {
-        $this->isFull = false;
+        $this->guid = $this->getGUID();
     }
 
     public function getId(): int
@@ -83,6 +83,17 @@ class GameModel extends AbstractModel
     {
         $this->currentPlayer = $currentPlayer;
         return $this;
+    }
+
+    public function randomPass(int $lenght = 5): string
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $result = '';
+        for ($i = 0; $i < $lenght; $i++) {
+            $result .= $characters[mt_rand(0, 35)];
+        }
+
+        return $result;
     }
 
     public function persist()

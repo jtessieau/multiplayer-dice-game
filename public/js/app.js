@@ -186,27 +186,3 @@ function highlightPlayer(nextPlayer) {
 function drawDice(diceRoll) {
     return "dice" + diceRoll
 }
-// Connect to Websocket
-const conn = new WebSocket('ws://localhost:8080')
-const player = new Player()
-
-
-// Websocket function
-conn.onopen = () => {
-    console.log('Connection established')
-    conn.send('hello, its me')
-};
-conn.onclose = () => {
-    console.log('Connection closed')
-}
-
-conn.onmessage = (e) => {
-    let data = JSON.parse(e.data)
-    console.log(data)
-
-    if (data.event === "connexion") {
-        player.id = data.resourceId
-        console.log(player)
-    }
-
-}

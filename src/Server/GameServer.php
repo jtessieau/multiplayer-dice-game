@@ -2,31 +2,34 @@
 
 namespace App\Server;
 
+use App\Model\GameModel;
+use App\Model\PlayerModel;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class GameServer implements MessageComponentInterface
 {
-    protected \SplObjectStorage $clients;
     protected array $games;
+    protected array $players;
 
     public function __construct()
     {
-        $this->clients = new \SplObjectStorage;
         $this->games = [];
+        $this->players = [];
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
-        $this->clients->attach($conn);
 
-        $data = [
-            "event" => "connexion",
-            "resourceId" => $conn->resourceId
-        ];
+        // When player connect to ws, generate an id and send it to him
+        $player = new PlayerModel();
+        $this->players[$player->guid] = [
+            "conn" =>$conn,
+            "player" => $player
+            ];
 
-        // Send connexion id to client.
-        $conn->send(json_encode($data));
+        //
+        $this->players[$player->guid]["conn"]->send(json_encode($this->players[$player->guid]));
 
         // Echo connexion id on server terminal
         echo "New connection! ({$conn->resourceId})\n";
@@ -34,56 +37,28 @@ class GameServer implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-
         $data = json_decode($msg, true);
 
-        if (isset($data['event'])) {
-            switch ($data['event']) {
-                case 'newGame':
-                    if (!empty($this->games)) {
-                        foreach ($this->games as $game) {
-                            if ($game['creator_resourceId'] = $data['player_resourceId']) {
-                                $data = $game;
-                                $data["event"] = "GameServer Found";
-                            }
-                        }
-                    } else {
-                        $gameData = [
-                            "event" => "GameServer Created",
-                            "creator_resourceId" => $data["player_resourceId"],
-                            "game_password" => $this->randomPass(),
-                            "player1" => [
-                                "id" => $data["player_resourceId"],
-                                "name" => "",
-                                "currentScore" => 0,
-                                "totalScore" => 0
-                            ],
-                            "player2" => [
-                                "id" => null,
-                                "name" => "",
-                                "currentScore" => 0,
-                                "totalScore" => 0
-                            ],
-                            "currentPlayer" => "player1"
-                        ];
-
-                        $this->games[] = $gameData;
-                    }
-                    $from->send(json_encode($data));
+        if (isset($data['method'])) {
+            switch ($data['method']) {
+                case 'player_connexion':
+                    $return = [
+                        "method" => "game_password",
+                        "password" => $this->connexion($from, $data)
+                    ];
+                    $from->send(json_encode($return));
                     break;
+                case 'find_game':
+                    echo "looking for games ...";
+                    $return = ["method" => "find_game", "message" => "Game not found"];
 
-                case 'joinGame':
                     foreach ($this->games as $game) {
-                        if ($data['code'] === $game['game_password']){
-                            $data = $game;
-                            $found = true;
+                        if ($game->password = $data['password']) {
+                            $return = ["method" => "find_game", "message" => "Game found"];
                         }
                     }
-                    !$found ?
-                    $data = [
-                        "event" => "GameServer not found"
-                    ] : $data['event'] = "GameServer found";
-                    $from->send(json_encode($data));
+                    $from->send(json_encode($return));
+
                     break;
             }
         }
@@ -101,5 +76,28 @@ class GameServer implements MessageComponentInterface
         echo "An error has occurred: {$e->getMessage()}\n";
 
         $conn->close();
+    }
+
+
+    public function connexion($from, $data)
+    {
+        $this->players[] = [
+            "resourceId" => $from->resourceId,
+            "guid" => $data['player_guid']
+        ];
+
+        if ($data['game'] === "New Game") {
+            $game = new GameModel();
+            $game->creatorId = $data['player_guid'];
+            $game->player1 = $data['player_guid'];
+            $game->password = $game->randomPass();
+            $this->games[] = $game;
+
+            return $game->password;
+        }
+
+        if ($data['game'] === "Join Game") {
+//
+        }
     }
 }
