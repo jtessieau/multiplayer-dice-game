@@ -64,12 +64,18 @@ class GameServer implements MessageComponentInterface
         if ($data['action'] === 'joinGame') {
             // Todo: join a game
             if (array_key_exists($data['gameId'], $this->games)) {
+                // Game found, add player to the game
+                $this->games[$data['gameId']]["players"][] = $from->resourceId;
+
                 $payLoad = [
-                    'action' => 'gameFound'
+                    "action" => "joinGame",
+                    "message" => "Game Found",
+                    "game" => $this->games[$data['gameId']]
                 ];
             } else {
                 $payLoad = [
-                    'action' => 'not found'
+                    'action' => 'joinGame',
+                    'message' => 'Game not found'
                 ];
 
             }

@@ -5,8 +5,8 @@
         <div class="col text-center">
             <h2>Welcome</h2>
             <div class="inputPlayerName">
-                <span><?= $player->getName(); ?></span>
-                <input type="hidden" name="playerName" placeholder="<?= $player->getName() ?>">
+                <span></span>
+                <input type="hidden" name="playerName" placeholder="">
                 <button class="btn btn-primary" id="playerSubmit">Edit</i></button>
             </div>
         </div>
