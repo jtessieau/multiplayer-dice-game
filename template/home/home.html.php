@@ -12,19 +12,15 @@
 
 
     <div class="row justify-content-center" id="gameSelector">
-        <form action="/game" method="post" class="d-grid">
             <input type="submit" class="btn btn-primary mb-3" id="newGameButton" name="game" value="New Game">
-        </form>
 
         <button class="btn btn-light" id="joinButton">Join a game</button>
     </div>
 
     <div class="row" id="joinForm">
-        <form action="/game" method="post">
             <input type="text" name="gameCode" id="inputGameId" placeholder="Enter game code">
             <div class="form-text"></div>
             <input type="submit" class="btn btn-primary" name="game" value="Join Game" id="btnJoin">
-        </form>
 
     </div>
 </div>
@@ -37,7 +33,6 @@
     // Websocket
     const ws = new WebSocket('ws://localhost:8080')
     ws.onopen = () => {
-        console.log('Connexion established')
         let request = {
             "action": "connexion"
         }
@@ -45,9 +40,7 @@
     };
 
     ws.onmessage = (e) => {
-        console.log('New message: ')
         let response = JSON.parse(e.data)
-        console.log(response)
 
         if (response.action === "playerId") {
             playerId = response.playerId
@@ -140,7 +133,6 @@
 
         // Roll Dice
         if (e.target.id === "btnRollDice") {
-            console.log('clic')
             let request = {
                 "action": "rollDice",
                 "playerId": playerId,
@@ -151,7 +143,6 @@
 
         // Hold Score
         if (e.target.id === "btnHoldScore") {
-            console.log('clic clic')
             let request = {
                 "action": "holdScore",
                 "playerId": playerId,
@@ -162,7 +153,6 @@
 
         // New game
         if (e.target.id === "btnNewGame") {
-            console.log('clic clic')
             let request = {
                 "action": "newGame",
                 "playerId": playerId,

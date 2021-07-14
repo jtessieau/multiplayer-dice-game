@@ -162,10 +162,8 @@ class GameServer implements MessageComponentInterface
         }
 
         if ($data['action'] === "newGame") {
-            echo "new game";
             $game = &$this->games[$data['gameId']];
             if ($game['winner'] !== null) {
-                echo 'il y a un gagnant';
                 $game['winner'] = null;
 
                 foreach ($game['players'] as &$player) {
