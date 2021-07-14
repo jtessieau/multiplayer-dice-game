@@ -46,10 +46,15 @@ class GameServer implements MessageComponentInterface
             $game = [
                 "gameId" => $this->getGUID(),
                 "players" => [
-                    $from->resourceId
+                    [
+                        "id" => $from->resourceId,
+                        "currentScore" => 0,
+                        "totalScore" => 0
+                    ]
                 ],
                 "diceScore" => 0,
-                "winner" => "none"
+                "currentPlayer" => rand(0, 1),
+                "winner" => null
             ];
 
             $this->games[$game['gameId']] = $game;
@@ -65,7 +70,29 @@ class GameServer implements MessageComponentInterface
             // Todo: join a game
             if (array_key_exists($data['gameId'], $this->games)) {
                 // Game found, add player to the game
-                $this->games[$data['gameId']]["players"][] = $from->resourceId;
+                $game = &$this->games[$data['gameId']];
+                $playerExist = false;
+                foreach ($game['players'] as $player) {
+                    if ($player['id'] === $from->resourceId) {
+                        $playerExist = true;
+                    }
+                }
+                if (!$playerExist) {
+                    $game["players"][] = [
+                        "id" => $from->resourceId,
+                        "currentScore" => 0,
+                        "totalScore" => 0
+                    ];
+                    $player1 = $this->games[$data['gameId']]["players"][0];
+
+                    $payLoad = [
+                        "action" => "playerJoin",
+                        "message" => "Player joined the game",
+                        "game" => $this->games[$data['gameId']]
+                    ];
+
+                    $this->clients[$player1['id']]->send(json_encode($payLoad));
+                }
 
                 $payLoad = [
                     "action" => "joinGame",
@@ -77,28 +104,89 @@ class GameServer implements MessageComponentInterface
                     'action' => 'joinGame',
                     'message' => 'Game not found'
                 ];
-
             }
         }
 
         if ($data['action'] === 'rollDice') {
             // Todo: player roll the dice
-            // return payLoad
-            // if dice score = 1 -> reset score from player
-            // and change active player
+            $game = &$this->games[$data['gameId']];
+
+            if ($data['playerId'] === $game['players'][$game['currentPlayer']]['id']) {
+                $game['diceScore'] = rand(1, 6);
+
+                // If dice = 1 -> Zero current score + Change player
+                if ($game['diceScore'] === 1) {
+                    $game['players'][$game['currentPlayer']]['currentScore'] = 0;
+                    if ($game['currentPlayer'] === 0) {
+                        $game['currentPlayer'] = 1;
+                    } else {
+                        $game['currentPlayer'] = 0;
+                    }
+                } else {
+                    $game['players'][$game['currentPlayer']]['currentScore'] += $game['diceScore'];
+                }
+                $payLoad = [
+                    "action" => "updateGameBoard",
+                    "game" => $this->games[$data['gameId']]
+                ];
+
+                foreach ($game['players'] as $client) {
+                    $this->clients[$client['id']]->send(json_encode($payLoad));
+                }
+            }
         }
-        if ($data['action'] === 'HoldScore') {
-            // Todo: player hold current score
-            // return payLoad
-            // if total score > 100 :
-            // end the game
-            // else :
-            // reset current score of current player
-            // change active player
+
+        if ($data['action'] === 'holdScore') {
+            $game = &$this->games[$data['gameId']];
+            if ($data['playerId'] === $game['players'][$game['currentPlayer']]['id']) {
+                $game['players'][$game['currentPlayer']]['totalScore'] += $game['players'][$game['currentPlayer']]['currentScore'];
+                $game['players'][$game['currentPlayer']]['currentScore'] = 0;
+                if ($game['players'][$game['currentPlayer']]['totalScore'] >= 100) {
+                    $game['winner'] = $game['currentPlayer'];
+                } else {
+                    if ($game['currentPlayer'] === 0) {
+                        $game['currentPlayer'] = 1;
+                    } else {
+                        $game['currentPlayer'] = 0;
+                    }
+                }
+                $payLoad = [
+                    "action" => "updateGameBoard",
+                    "game" => $this->games[$data['gameId']]
+                ];
+
+                foreach ($game['players'] as $client) {
+                    $this->clients[$client['id']]->send(json_encode($payLoad));
+                }
+            }
+        }
+
+        if ($data['action'] === "newGame") {
+            echo "new game";
+            $game = &$this->games[$data['gameId']];
+            if ($game['winner'] !== null) {
+                echo 'il y a un gagnant';
+                $game['winner'] = null;
+
+                foreach ($game['players'] as &$player) {
+                    $player['currentScore'] = 0;
+                    $player['totalScore'] = 0;
+                }
+
+                $payLoad = [
+                    "action" => "updateGameBoard",
+                    "game" => $this->games[$data['gameId']]
+                ];
+
+                foreach ($game['players'] as $client) {
+                    $this->clients[$client['id']]->send(json_encode($payLoad));
+                }
+            }
+
         }
 
         // Send the payload to client if not empty
-        if (!empty($payLoad)) {
+        if (!empty($payLoad && $payLoad['action'] !== "updateGameBoard")) {
             $from->send(json_encode($payLoad));
         }
     }
