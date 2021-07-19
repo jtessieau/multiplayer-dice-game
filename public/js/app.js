@@ -4,6 +4,13 @@ let gameId = ''
 
 // Websocket
 const ws = new WebSocket('ws://localhost:8080')
+ws.onerror = () => {
+    console.log(ws.readyState)
+    if (ws.readyState === 3) {
+        console.log("WS connect error");
+        document.querySelector('.container').innerHTML = "Can't connect to the server, try again later...";
+    }
+}
 ws.onopen = () => {
     let request = {
         "action": "connexion"
