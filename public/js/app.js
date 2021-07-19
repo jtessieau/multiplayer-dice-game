@@ -1,6 +1,11 @@
 // Player Id
-let playerId = ''
-let gameId = ''
+let player = {
+    "id":null,
+    "name":''
+};
+let game = {
+    "id":null
+};
 
 // Websocket
 const ws = new WebSocket('ws://localhost:8080')
@@ -22,15 +27,12 @@ ws.onmessage = (e) => {
     let response = JSON.parse(e.data)
 
     if (response.action === "playerId") {
-        playerId = response.playerId
-        let el = document.createElement('div')
-        el.innerText = playerId
-        document.querySelector('.container').appendChild(el)
+        player.id = response.playerId
     }
 
     if (response.action === "createGame") {
-        gameId = response.game.gameId
-        container.innerHTML = '<div class="gameCode">Game code: ' + gameId + '</div>'
+        game.id = response.game.gameId
+        container.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
         container.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
     }
 
@@ -45,7 +47,7 @@ ws.onmessage = (e) => {
 
     if (response.action === "joinGame") {
         if (response.message === "Game Found") {
-            gameId = response.game.gameId
+            game.id = response.game.gameId
 
             container.innerHTML = ''
             const game = document.createElement('div')
@@ -114,8 +116,8 @@ container.addEventListener('click', (e) => {
     if (e.target.id === "btnRollDice") {
         let request = {
             "action": "rollDice",
-            "playerId": playerId,
-            "gameId": gameId
+            "playerId": player.id,
+            "gameId": game.id
         }
         ws.send(JSON.stringify(request))
     }
@@ -124,8 +126,8 @@ container.addEventListener('click', (e) => {
     if (e.target.id === "btnHoldScore") {
         let request = {
             "action": "holdScore",
-            "playerId": playerId,
-            "gameId": gameId
+            "playerId": player.id,
+            "gameId": game.id
         }
         ws.send(JSON.stringify(request))
     }
@@ -134,8 +136,8 @@ container.addEventListener('click', (e) => {
     if (e.target.id === "btnNewGame") {
         let request = {
             "action": "newGame",
-            "playerId": playerId,
-            "gameId": gameId
+            "playerId": player.id,
+            "gameId": game.id
         }
         ws.send(JSON.stringify(request))
     }
