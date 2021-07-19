@@ -7,6 +7,31 @@ let game = {
     "id": ''
 };
 
+// Homepage dom manipulation
+
+const displayPlayerName = document.querySelector(".displayPlayerName")
+const inputEditPlayerName = document.querySelector(".inputEditPlayerName")
+const btnEditPlayerName = document.querySelector(".btnEditPlayerName");
+
+btnEditPlayerName.addEventListener('click', (e) => {
+    if (btnEditPlayerName.innerText === "Edit") {
+        btnEditPlayerName.innerText = "validate";
+        inputEditPlayerName.type = "text";
+        inputEditPlayerName.value = player.name;
+        inputEditPlayerName.focus();
+        inputEditPlayerName.select();
+        displayPlayerName.style.display = "none";
+    } else {
+        player.name = inputEditPlayerName.value;
+        inputEditPlayerName.type = "hidden";
+        displayPlayerName.style.display = "inline-block";
+        displayPlayerName.innerText = player.name;
+        btnEditPlayerName.innerText="Edit";
+    }
+
+})
+
+
 // Websocket
 const ws = new WebSocket('ws://localhost:8080')
 ws.onerror = () => {
@@ -29,6 +54,7 @@ ws.onmessage = (e) => {
     if (response.action === "playerId") {
         player.id = response.playerId;
         player.name = "Player" + player.id;
+        displayPlayerName.innerHTML = player.name;
     }
 
     if (response.action === "createGame") {

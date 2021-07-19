@@ -10,8 +10,9 @@
         <div class="col">
             <h2>Welcome</h2>
             <div class="inputPlayerName">
-                <input type="hidden" name="playerName" placeholder="">
-                <button class="btn btn-primary" id="playerSubmit">Edit</i></button>
+                <span class="displayPlayerName"></span>
+                <input type="hidden" name="playerName" class="inputEditPlayerName" placeholder="">
+                <button class="btn btn-primary btnEditPlayerName">Edit</i></button>
             </div>
         </div>
     </div>
