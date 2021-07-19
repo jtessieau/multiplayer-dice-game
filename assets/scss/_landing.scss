@@ -1,43 +1,65 @@
-.landing-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.content {
+  width: 90vw;
+  min-height: 80vh;
+  padding: 60px;
+  background-color: hsla(0, 0, 0%, 0.6);
+}
+
+h1 {
+  margin: 0;
+}
+
+.subh1 {
+  font-style: italic;
+  color: orangered;
+}
+
+.landing-controls {
   width: 100%;
-  min-height: 100vh;
-  background: url("./images/dice.jpg");
-  background-position: top;
-  background-size: cover;
+  text-align: center;
+}
 
-  .hero-text {
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 3rem 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 2rem;
+.inputPlayerName {
+  margin: 12% auto 2rem;
+  font-size: 3rem;
 
-    h1 {
-      margin-bottom: 2rem;
-    }
+  span, input {
+    text-align: center;
+  }
+  input {
+    background-color: hsla(0, 0, 50%, 0.4);
+    color:white;
+  }
 
-    .hero-button {
-      a {
-        color: black;
-        text-decoration: none;
-        padding: 0.5rem 1rem;
-        border-radius: .5rem;
-        background: #fff;
-        border: 2px solid black;
+  .btnEditPlayerName {
+    background: none;
+    border: none;
+    outline: none;
+    color: inherit;
+    margin-left: 1rem;
+  }
+}
 
-        &:active,&:hover {
-          color: #fff;
-          border: 2px solid white;
-          background: black;
-        }
-      }
-    }
+.gameLauncher {
+  #inputGameId {
+    width: 100%;
+    display: none;
+    padding: 0.5rem;
+    color:white;
+    font-size: 1.5rem;
+    text-align: center;
+    background-color: hsla(0, 0, 50%, 0.4);
 
   }
+
+  .btnLauncher input {
+    font-size: 1.5rem;
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
+    margin: 2rem;
+    color: white;
+
+    background-color: hsla(0, 0, 50%, 0.2);
+  }
+
 }

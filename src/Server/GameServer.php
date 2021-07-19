@@ -180,7 +180,6 @@ class GameServer implements MessageComponentInterface
                     $this->clients[$client['id']]->send(json_encode($payLoad));
                 }
             }
-
         }
 
         // Send the payload to client if not empty
@@ -210,7 +209,7 @@ class GameServer implements MessageComponentInterface
         if (function_exists('com_create_guid')) {
             return com_create_guid();
         } else {
-            mt_srand((double)microtime() * 10000);//optional for php 4.2.0 and up.
+            mt_srand((float)microtime() * 10000);//optional for php 4.2.0 and up.
             $charid = strtoupper(md5(uniqid(rand(), true)));
             $hyphen = chr(45);// "-"
             $uuid = chr(123)// "{"

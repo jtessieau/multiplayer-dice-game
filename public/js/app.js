@@ -14,23 +14,33 @@ const inputEditPlayerName = document.querySelector(".inputEditPlayerName")
 const btnEditPlayerName = document.querySelector(".btnEditPlayerName");
 
 btnEditPlayerName.addEventListener('click', (e) => {
-    if (btnEditPlayerName.innerText === "Edit") {
-        btnEditPlayerName.innerText = "validate";
+    if (inputEditPlayerName.type === "hidden") {
+        btnEditPlayerName.style.display = "none";
         inputEditPlayerName.type = "text";
         inputEditPlayerName.value = player.name;
         inputEditPlayerName.focus();
         inputEditPlayerName.select();
         displayPlayerName.style.display = "none";
-    } else {
+    }
+})
+
+inputEditPlayerName.addEventListener('keyup', (e) => {
+    if (e.code === "Enter") {
         player.name = inputEditPlayerName.value;
         inputEditPlayerName.type = "hidden";
         displayPlayerName.style.display = "inline-block";
         displayPlayerName.innerText = player.name;
-        btnEditPlayerName.innerText="Edit";
+        btnEditPlayerName.style.display = "inline";
     }
-
 })
+const btnLauncher = document.querySelector('.btnLauncher');
+const inputGameId = document.querySelector('#inputGameId')
+const btnJoin = document.querySelector('#btnJoin');
 
+btnJoin.addEventListener("click", (e) => {
+    btnLauncher.style.display = "none";
+    inputGameId.style.display = "block";
+})
 
 // Websocket
 const ws = new WebSocket('ws://localhost:8080')
@@ -38,7 +48,7 @@ ws.onerror = () => {
     console.log(ws.readyState)
     if (ws.readyState === 3) {
         console.log("WS connect error");
-        document.querySelector('.container').innerHTML = "Can't connect to the server, try again later...";
+        document.querySelector('.content').innerHTML = "Can't connect to the server, try again later...";
     }
 }
 ws.onopen = () => {
@@ -59,17 +69,17 @@ ws.onmessage = (e) => {
 
     if (response.action === "createGame") {
         game.id = response.game.gameId
-        container.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
-        container.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
+        content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
+        content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
     }
 
     if (response.action === "playerJoin") {
-        container.innerHTML = ''
+        content.innerHTML = ''
         const gameboard = document.createElement('div')
         fetch('/gameboard').then(async (response) => {
             gameboard.innerHTML = await response.text()
         })
-        container.appendChild(gameboard)
+        content.appendChild(gameboard)
     }
 
     if (response.action === "joinGame") {
@@ -78,12 +88,12 @@ ws.onmessage = (e) => {
             console.log(game)
             game.id = response.game.gameId
 
-            container.innerHTML = ''
+            content.innerHTML = ''
             const gameboard = document.createElement('div')
             fetch('/gameboard').then(async (res) => {
                 gameboard.innerHTML = await res.text()
             })
-            container.appendChild(gameboard)
+            content.appendChild(gameboard)
         } else {
             // Todo
         }
@@ -111,7 +121,7 @@ ws.onmessage = (e) => {
 };
 
 // Dom elements
-const container = document.querySelector('.container');
+const content = document.querySelector('.content');
 
 // Create a new game
 const btnCreate = document.querySelector('#newGameButton')
@@ -124,21 +134,21 @@ btnCreate.addEventListener('click', (e) => {
 })
 
 // Join a game
-const btnJoin = document.querySelector('#btnJoin')
-const inputGameId = document.querySelector('#inputGameId')
+inputGameId.addEventListener('keyup', (e) => {
+    if (e.code === "Enter") {
 
-btnJoin.addEventListener('click', (e) => {
-    e.preventDefault()
-    let request = {
-        "action": "joinGame",
-        "gameId": inputGameId.value
+        let request = {
+            "action": "joinGame",
+            "gameId": inputGameId.value
+        }
+
+        ws.send(JSON.stringify(request))
     }
 
-    ws.send(JSON.stringify(request))
 })
 
 // Game Action
-container.addEventListener('click', (e) => {
+content.addEventListener('click', (e) => {
     e.preventDefault()
 
     // Roll Dice

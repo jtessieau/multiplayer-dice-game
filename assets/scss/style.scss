@@ -2,18 +2,11 @@
 @import 'landing';
 @import 'dice';
 
-.inputPlayerName {
-  span {
-    display: inline-block;
-    text-align: left;
-  }
-  span,input {
-    width:300px;
-  }
-}
-
 body {
   background: url("../images/bg.jpg") center;
   background-size: cover;
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

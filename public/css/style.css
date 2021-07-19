@@ -22,41 +22,62 @@ select {
   font: inherit;
 }
 
-.landing-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.content {
+  width: 90vw;
+  min-height: 80vh;
+  padding: 60px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+h1 {
+  margin: 0;
+}
+
+.subh1 {
+  font-style: italic;
+  color: orangered;
+}
+
+.landing-controls {
   width: 100%;
-  min-height: 100vh;
-  background: url("./images/dice.jpg");
-  background-position: top;
-  background-size: cover;
+  text-align: center;
 }
-.landing-page .hero-text {
+
+.inputPlayerName {
+  margin: 12% auto 2rem;
+  font-size: 3rem;
+}
+.inputPlayerName span, .inputPlayerName input {
+  text-align: center;
+}
+.inputPlayerName input {
+  background-color: rgba(128, 128, 128, 0.4);
   color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 3rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 2rem;
 }
-.landing-page .hero-text h1 {
-  margin-bottom: 2rem;
+.inputPlayerName .btnEditPlayerName {
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  margin-left: 1rem;
 }
-.landing-page .hero-text .hero-button a {
-  color: black;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background: #fff;
-  border: 2px solid black;
+
+.gameLauncher #inputGameId {
+  width: 100%;
+  display: none;
+  padding: 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+  text-align: center;
+  background-color: rgba(128, 128, 128, 0.4);
 }
-.landing-page .hero-text .hero-button a:active, .landing-page .hero-text .hero-button a:hover {
-  color: #fff;
-  border: 2px solid white;
-  background: black;
+.gameLauncher .btnLauncher input {
+  font-size: 1.5rem;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+  margin: 2rem;
+  color: white;
+  background-color: rgba(128, 128, 128, 0.2);
 }
 
 @keyframes wizz {
@@ -217,18 +238,13 @@ select {
   transform: translate(2rem, -2.5rem);
 }
 
-.inputPlayerName span {
-  display: inline-block;
-  text-align: left;
-}
-.inputPlayerName span, .inputPlayerName input {
-  width: 300px;
-}
-
 body {
   background: url("../images/bg.jpg") center;
   background-size: cover;
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /*# sourceMappingURL=style.css.map */
