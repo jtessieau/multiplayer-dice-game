@@ -1,9 +1,15 @@
 <div class="container">
+
     <div class="row justify-content-center mb-5">
-        <div class="col text-center">
+        <div class="col">
+            <img src="images/logo.png" alt="logo">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
             <h2>Welcome</h2>
             <div class="inputPlayerName">
-                <span></span>
                 <input type="hidden" name="playerName" placeholder="">
                 <button class="btn btn-primary" id="playerSubmit">Edit</i></button>
             </div>

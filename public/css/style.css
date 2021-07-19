@@ -225,4 +225,10 @@ select {
   width: 300px;
 }
 
+body {
+  background: url("../images/bg.jpg") center;
+  background-size: cover;
+  color: white;
+}
+
 /*# sourceMappingURL=style.css.map */

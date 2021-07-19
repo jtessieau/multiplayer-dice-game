@@ -1,10 +1,10 @@
 // Player Id
 let player = {
-    "id":null,
-    "name":''
+    "id": '',
+    "name": ''
 };
 let game = {
-    "id":null
+    "id": ''
 };
 
 // Websocket
@@ -27,7 +27,8 @@ ws.onmessage = (e) => {
     let response = JSON.parse(e.data)
 
     if (response.action === "playerId") {
-        player.id = response.playerId
+        player.id = response.playerId;
+        player.name = "Player" + player.id;
     }
 
     if (response.action === "createGame") {
@@ -38,23 +39,25 @@ ws.onmessage = (e) => {
 
     if (response.action === "playerJoin") {
         container.innerHTML = ''
-        const game = document.createElement('div')
+        const gameboard = document.createElement('div')
         fetch('/gameboard').then(async (response) => {
-            game.innerHTML = await response.text()
+            gameboard.innerHTML = await response.text()
         })
-        container.appendChild(game)
+        container.appendChild(gameboard)
     }
 
     if (response.action === "joinGame") {
+        console.log(game)
         if (response.message === "Game Found") {
+            console.log(game)
             game.id = response.game.gameId
 
             container.innerHTML = ''
-            const game = document.createElement('div')
+            const gameboard = document.createElement('div')
             fetch('/gameboard').then(async (res) => {
-                game.innerHTML = await res.text()
+                gameboard.innerHTML = await res.text()
             })
-            container.appendChild(game)
+            container.appendChild(gameboard)
         } else {
             // Todo
         }
@@ -82,7 +85,7 @@ ws.onmessage = (e) => {
 };
 
 // Dom elements
-const container = document.querySelector('.container')
+const container = document.querySelector('.container');
 
 // Create a new game
 const btnCreate = document.querySelector('#newGameButton')
