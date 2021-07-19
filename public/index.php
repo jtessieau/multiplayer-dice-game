@@ -4,7 +4,7 @@ require_once "../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     // Home route
-    $r->addRoute(['GET', 'POST'], '/', 'HomeController@index');
+    $r->addRoute('GET', '/', 'HomeController@index');
     $r->addRoute('GET', '/gameboard', 'HomeController@gameboard');
 });
 

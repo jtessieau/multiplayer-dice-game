@@ -10,6 +10,7 @@ class HomeController extends AbstractController
         $this->render('Home','home/home.html.php');
     }
 
+    // Route to load game board through Async js
     public function gameboard()
     {
         require_once '../template/gameboard/gameboard.html.php';
