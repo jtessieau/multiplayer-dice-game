@@ -40,6 +40,7 @@ const btnJoin = document.querySelector('#btnJoin');
 btnJoin.addEventListener("click", (e) => {
     btnLauncher.style.display = "none";
     inputGameId.style.display = "block";
+    inputGameId.focus();
 })
 
 // Websocket
