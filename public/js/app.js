@@ -2,9 +2,25 @@
 const ws = new WebSocket('ws://localhost:8080')
 
 // Player Id
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 let player = {
     "id": '',
-    "name": ''
+    "name": getCookie("playerName")
 };
 let game = {
     "id": ''
@@ -22,9 +38,18 @@ const btnCreate = document.querySelector('#newGameButton')
 const btnJoin = document.querySelector('#btnJoin');
 const inputGameId = document.querySelector('#inputGameId');
 
-
-// Game board elem
-
+function escapeHtml(str)
+{
+    const map =
+        {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+    return str.replace(/[&<>"']/g, function(m) {return map[m];});
+}
 
 // Event listener
 
@@ -42,7 +67,8 @@ btnEditPlayerName.addEventListener('click', (e) => {
 
 inputEditPlayerName.addEventListener('keyup', (e) => {
     if (e.code === "Enter") {
-        player.name = inputEditPlayerName.value;
+        player.name = escapeHtml(inputEditPlayerName.value);
+        document.cookie = "playerName="+player.name;
         inputEditPlayerName.type = "hidden";
         displayPlayerName.style.display = "inline-block";
         displayPlayerName.innerText = player.name;
@@ -75,7 +101,7 @@ inputGameId.addEventListener('keyup', (e) => {
         let request = {
             "action": "joinGame",
             "playerName": player.name,
-            "gameId": inputGameId.value
+            "gameId": escapeHtml(inputGameId.value)
         }
 
         ws.send(JSON.stringify(request))
@@ -168,7 +194,10 @@ ws.onmessage = (e) => {
 
     if (response.action === "playerId") {
         player.id = response.playerId;
-        player.name = "Player" + player.id;
+        if(player.name === '') {
+            player.name = "Player" + player.id;
+            document.cookie = "playerName="+player.name;
+        }
         displayPlayerName.innerHTML = player.name;
     }
 

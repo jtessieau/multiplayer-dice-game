@@ -1,4 +1,4 @@
--[ ] Use php session to retrieve player in case of connection lost
+-[x] Use cookies to retrieve player in case of connection lost
 -[x] Highlight current player in game board
 -[x] Delete game if one of the player disconnect
     -[x] Inform the player that is opponent left
