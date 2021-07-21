@@ -81,7 +81,7 @@ class GameServer implements MessageComponentInterface
                 if (!$playerExist) {
                     $game["players"][] = [
                         "id" => $from->resourceId,
-                        "name"=> $data['playerName'],
+                        "name" => $data['playerName'],
                         "currentScore" => 0,
                         "totalScore" => 0
                     ];
@@ -163,6 +163,7 @@ class GameServer implements MessageComponentInterface
             }
         }
 
+        //reset score
         if ($data['action'] === "newGame") {
             $game = &$this->games[$data['gameId']];
             if ($game['winner'] !== null) {
@@ -196,6 +197,17 @@ class GameServer implements MessageComponentInterface
 
         // Echo connexion resource of disconnected player
         echo "Connection {$conn->resourceId} has disconnected\n";
+
+        foreach ($this->games as $game) {
+            $gameId = $game['gameId'];
+
+            if ($game['players'][0]['id'] === $conn->resourceId || $game['players'][1]['id']===$conn->resourceId) {
+                unset($this->games[$gameId]);
+            }
+
+        }
+        var_dump($this->games);
+
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
