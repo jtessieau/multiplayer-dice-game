@@ -1,5 +1,5 @@
 // Connect to websocket
-const ws = new WebSocket('ws://localhost:8080')
+const ws = new WebSocket('ws://acronyme.me:8080')
 
 // Player Id
 function getCookie(cname) {
