@@ -1,0 +1,29 @@
+@import 'reset';
+@import 'landing';
+@import 'dice';
+
+body {
+  background: url("../images/bg.jpeg") center;
+  background-size: cover;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.playerName {
+  font-size: 3rem;
+  font-weight: lighter;
+}
+.active-player {
+  font-weight: normal;
+}
+.active-player::after {
+  content: "";
+  margin-left: 1rem;
+  margin-bottom: 0.3rem;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: red;
+  border-radius: 50%;
+}
