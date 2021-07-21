@@ -152,9 +152,7 @@ function updateGame(response) {
 
 // Websocket
 ws.onerror = () => {
-    console.log(ws.readyState)
     if (ws.readyState === 3) {
-        console.log("WS connect error");
         document.querySelector('.content').innerHTML = "Can't connect to the server, try again later...";
     }
 }
@@ -178,7 +176,6 @@ ws.onmessage = (e) => {
         game.id = response.game.gameId
         content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
         content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
-        console.log(response)
     }
 
     if (response.action === "playerJoin") {
@@ -210,5 +207,10 @@ ws.onmessage = (e) => {
             // todo: winner display
             alert('winner')
         }
+    }
+
+    if (response.action === "disconnectedPlayer") {
+        alert(response.message);
+        window.location.href = '/';
     }
 };

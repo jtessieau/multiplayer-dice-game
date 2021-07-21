@@ -198,15 +198,34 @@ class GameServer implements MessageComponentInterface
         // Echo connexion resource of disconnected player
         echo "Connection {$conn->resourceId} has disconnected\n";
 
+        // Search if the player was involve in a game and delete this game if found.
         foreach ($this->games as $game) {
             $gameId = $game['gameId'];
+            if ($game['players'][0]['id'] === $conn->resourceId) {
+                $player = 0;
+            }
 
-            if ($game['players'][0]['id'] === $conn->resourceId || $game['players'][1]['id']===$conn->resourceId) {
+            if ($game['players'][1]['id'] === $conn->resourceId) {
+                $player = 1;
+            }
+
+            if(isset($player)) {
+                // Is there a 2nd player allready ?
+
+                $secondPlayer = $player === 0 ? 1 : 0;
+                if (isset($this->games[$gameId]['players'][$secondPlayer])) {
+                    $payLoad = [
+                        "action" => "disconnectedPlayer",
+                        "message" => "A player is disconnected, please launch a new game."
+                    ];
+                    $this->clients[$this->games[$gameId]['players'][$secondPlayer]['id']]->send(json_encode($payLoad));
+                    var_dump($this->games[$gameId]['players'][$secondPlayer]['id']);
+                }
+
                 unset($this->games[$gameId]);
             }
 
         }
-        var_dump($this->games);
 
     }
 

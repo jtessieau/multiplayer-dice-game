@@ -1,7 +1,7 @@
 -[ ] Use php session to retrieve player in case of connection lost
 -[x] Highlight current player in game board
 -[x] Delete game if one of the player disconnect
-    -[ ] Inform the player that is opponent left
+    -[x] Inform the player that is opponent left
 -[x] Pass player name to game board
 -[ ] Design a mobile version of the game board
 -[x] Add dice animation
