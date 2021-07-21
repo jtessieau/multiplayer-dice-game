@@ -1,3 +1,6 @@
+// Connect to websocket
+const ws = new WebSocket('ws://localhost:8080')
+
 // Player Id
 let player = {
     "id": '',
@@ -7,12 +10,25 @@ let game = {
     "id": ''
 };
 
-// Homepage dom manipulation
+// Homepage elements
+const content = document.querySelector('.content');
 
-const displayPlayerName = document.querySelector(".displayPlayerName")
-const inputEditPlayerName = document.querySelector(".inputEditPlayerName")
+const displayPlayerName = document.querySelector(".displayPlayerName");
+const inputEditPlayerName = document.querySelector(".inputEditPlayerName");
 const btnEditPlayerName = document.querySelector(".btnEditPlayerName");
 
+const btnLauncher = document.querySelector('.btnLauncher');
+const btnCreate = document.querySelector('#newGameButton')
+const btnJoin = document.querySelector('#btnJoin');
+const inputGameId = document.querySelector('#inputGameId');
+
+
+// Game board elem
+
+
+// Event listener
+
+// Modify player name
 btnEditPlayerName.addEventListener('click', (e) => {
     if (inputEditPlayerName.type === "hidden") {
         btnEditPlayerName.style.display = "none";
@@ -33,113 +49,32 @@ inputEditPlayerName.addEventListener('keyup', (e) => {
         btnEditPlayerName.style.display = "inline";
     }
 })
-const btnLauncher = document.querySelector('.btnLauncher');
-const inputGameId = document.querySelector('#inputGameId')
-const btnJoin = document.querySelector('#btnJoin');
 
+// Websocket Send action
+
+// Create a new game
+btnCreate.addEventListener('click', (e) => {
+    e.preventDefault()
+    let request = {
+        "action": "createGame",
+        "playerName": player.name
+    }
+    ws.send(JSON.stringify(request))
+})
+
+// Join a game
 btnJoin.addEventListener("click", (e) => {
     btnLauncher.style.display = "none";
     inputGameId.style.display = "block";
     inputGameId.focus();
 })
 
-// Websocket
-const ws = new WebSocket('ws://localhost:8080')
-ws.onerror = () => {
-    console.log(ws.readyState)
-    if (ws.readyState === 3) {
-        console.log("WS connect error");
-        document.querySelector('.content').innerHTML = "Can't connect to the server, try again later...";
-    }
-}
-ws.onopen = () => {
-    let request = {
-        "action": "connexion"
-    }
-    ws.send(JSON.stringify(request));
-};
-
-ws.onmessage = (e) => {
-    let response = JSON.parse(e.data)
-
-    if (response.action === "playerId") {
-        player.id = response.playerId;
-        player.name = "Player" + player.id;
-        displayPlayerName.innerHTML = player.name;
-    }
-
-    if (response.action === "createGame") {
-        game.id = response.game.gameId
-        content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
-        content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
-    }
-
-    if (response.action === "playerJoin") {
-        content.innerHTML = ''
-        const gameboard = document.createElement('div')
-        fetch('/gameboard').then(async (response) => {
-            gameboard.innerHTML = await response.text()
-        })
-        content.appendChild(gameboard)
-    }
-
-    if (response.action === "joinGame") {
-        console.log(game)
-        if (response.message === "Game Found") {
-            console.log(game)
-            game.id = response.game.gameId
-
-            content.innerHTML = ''
-            const gameboard = document.createElement('div')
-            fetch('/gameboard').then(async (res) => {
-                gameboard.innerHTML = await res.text()
-            })
-            content.appendChild(gameboard)
-        } else {
-            // Todo
-        }
-    }
-
-    if (response.action === "updateGameBoard") {
-
-        let dice = document.querySelector('#dice')
-        dice.className = 'dice' + response.game.diceScore
-        let player1Current = document.querySelector('#player1Current')
-        player1Current.innerText = response.game.players[0].currentScore
-        let player1Total = document.querySelector('#player1Total')
-        player1Total.innerHTML = response.game.players[0].totalScore
-        let player2Current = document.querySelector('#player2Current')
-        player2Current.innerHTML = response.game.players[1].currentScore
-        let player2Total = document.querySelector('#player2Total')
-        player2Total.innerHTML = response.game.players[1].totalScore
-
-        if (response.game.winner !== null) {
-
-            // todo: winner display
-            alert('winner')
-        }
-    }
-};
-
-// Dom elements
-const content = document.querySelector('.content');
-
-// Create a new game
-const btnCreate = document.querySelector('#newGameButton')
-btnCreate.addEventListener('click', (e) => {
-    e.preventDefault()
-    let request = {
-        "action": "createGame"
-    }
-    ws.send(JSON.stringify(request))
-})
-
-// Join a game
 inputGameId.addEventListener('keyup', (e) => {
     if (e.code === "Enter") {
 
         let request = {
             "action": "joinGame",
+            "playerName": player.name,
             "gameId": inputGameId.value
         }
 
@@ -182,3 +117,94 @@ content.addEventListener('click', (e) => {
         ws.send(JSON.stringify(request))
     }
 })
+
+// Charge game board
+const gameboard = document.createElement('div')
+fetch('/gameboard').then( async (res) => {
+    gameboard.innerHTML = await res.text()
+})
+
+function loadGame() {
+    content.innerHTML = '';
+    content.appendChild(gameboard);
+}
+
+function updateGame(response) {
+    document.querySelector('#dice').className = 'dice' + response.game.diceScore;
+
+    document.querySelector('#player1').innerText = response.game.players[0].name;
+    document.querySelector('#player1Current').innerText = response.game.players[0].currentScore;
+    document.querySelector('#player1Total').innerText = response.game.players[0].totalScore;
+
+    document.querySelector('#player2').innerText = response.game.players[1].name;
+    document.querySelector('#player2Current').innerText = response.game.players[1].currentScore;
+    document.querySelector('#player2Total').innerText = response.game.players[1].totalScore;
+
+    if (response.game.currentPlayer === 0) {
+        document.querySelector('#player1').classList.add('active-player');
+        document.querySelector('#player2').classList.remove('active-player');
+    } else {
+        document.querySelector('#player1').classList.remove('active-player');
+        document.querySelector('#player2').classList.add('active-player');
+    }
+
+}
+
+// Websocket
+ws.onerror = () => {
+    console.log(ws.readyState)
+    if (ws.readyState === 3) {
+        console.log("WS connect error");
+        document.querySelector('.content').innerHTML = "Can't connect to the server, try again later...";
+    }
+}
+ws.onopen = () => {
+    let request = {
+        "action": "connexion"
+    }
+    ws.send(JSON.stringify(request));
+};
+
+ws.onmessage = (e) => {
+    let response = JSON.parse(e.data)
+
+    if (response.action === "playerId") {
+        player.id = response.playerId;
+        player.name = "Player" + player.id;
+        displayPlayerName.innerHTML = player.name;
+    }
+
+    if (response.action === "createGame") {
+        game.id = response.game.gameId
+        content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
+        content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
+    }
+
+    if (response.action === "playerJoin") {
+        loadGame();
+        updateGame(response);
+
+    }
+
+    if (response.action === "joinGame") {
+        if (response.message === "Game Found") {
+            game.id = response.game.gameId
+
+            loadGame();
+            updateGame(response);
+
+        } else {
+            // Todo: Game not found
+        }
+    }
+
+    if (response.action === "updateGameBoard") {
+        updateGame(response);
+
+        if (response.game.winner !== null) {
+
+            // todo: winner display
+            alert('winner')
+        }
+    }
+};

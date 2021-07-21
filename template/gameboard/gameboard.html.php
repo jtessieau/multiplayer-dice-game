@@ -8,13 +8,13 @@
 
     <div class="row text-center p-5">
         <div class="col player1Frame align-self-center">
-            <h2 id="player1" class="playerName">PLAYER 1</h2>
+            <h2 id="player1" class="playerName"></h2>
             <div id="player1Total" class="display-1 mb-5">
-                0
+
             </div>
             <div class="displayPlayerCurrent">
                 <h3>CURRENT</h3>
-                <div id="player1Current" class="display-6">0</div>
+                <div id="player1Current" class="display-6"></div>
             </div>
         </div>
 
@@ -34,13 +34,13 @@
         </div>
 
         <div class="col player2Frame align-self-center">
-            <h2 id="player2" class="playerName">PLAYER 2</h2>
+            <h2 id="player2" class="playerName"></h2>
             <div id="player2Total" class="display-1 mb-5">
-                0
+
             </div>
             <div class="displayPlayerCurrent">
                 <h3>CURRENT</h3>
-                <div id="player2Current" class="display-6">0</div>
+                <div id="player2Current" class="display-6"></div>
             </div>
         </div>
     </div>

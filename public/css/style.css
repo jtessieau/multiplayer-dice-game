@@ -247,4 +247,24 @@ body {
   align-items: center;
 }
 
+.playerName {
+  font-size: 3rem;
+  font-weight: lighter;
+}
+
+.active-player {
+  font-weight: normal;
+}
+
+.active-player::after {
+  content: "";
+  margin-left: 1rem;
+  margin-bottom: 0.3rem;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: red;
+  border-radius: 50%;
+}
+
 /*# sourceMappingURL=style.css.map */

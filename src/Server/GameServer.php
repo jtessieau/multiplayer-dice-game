@@ -48,6 +48,7 @@ class GameServer implements MessageComponentInterface
                 "players" => [
                     [
                         "id" => $from->resourceId,
+                        "name" => $data['playerName'],
                         "currentScore" => 0,
                         "totalScore" => 0
                     ]
@@ -80,6 +81,7 @@ class GameServer implements MessageComponentInterface
                 if (!$playerExist) {
                     $game["players"][] = [
                         "id" => $from->resourceId,
+                        "name"=> $data['playerName'],
                         "currentScore" => 0,
                         "totalScore" => 0
                     ];
