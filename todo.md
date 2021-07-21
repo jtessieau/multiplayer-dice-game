@@ -4,6 +4,6 @@
     -[ ] Inform the player that is opponent left
 -[x] Pass player name to game board
 -[ ] Design a mobile version of the game board
--[ ] Add dice animation
+-[x] Add dice animation
 -[ ] Upgrade winner display
 -[ ] Add game not found message

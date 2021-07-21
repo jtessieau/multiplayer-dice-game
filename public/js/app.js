@@ -178,6 +178,7 @@ ws.onmessage = (e) => {
         game.id = response.game.gameId
         content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
         content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
+        console.log(response)
     }
 
     if (response.action === "playerJoin") {
@@ -200,6 +201,9 @@ ws.onmessage = (e) => {
 
     if (response.action === "updateGameBoard") {
         updateGame(response);
+        document.querySelector('#dice').classList.remove("animateDice")
+        void document.querySelector('#dice').offsetWidth // To reset animation
+        document.querySelector('#dice').classList.add("animateDice")
 
         if (response.game.winner !== null) {
 
