@@ -3,8 +3,8 @@ require_once "../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     // Home route
-    $r->addRoute('GET', '/', 'HomeController@index');
-    $r->addRoute('GET', '/gameboard', 'HomeController@gameboard');
+    $r->addRoute('GET', '/', 'App\Controller\HomeController@index');
+    $r->addRoute('GET', '/gameboard', 'App\Controller\HomeController@gameboard');
 });
 
 // Fetch method and URI from somewhere
@@ -33,19 +33,8 @@ switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];
         $vars = $routeInfo[2];
-        // ... call $handler with $vars
+        list($class, $method) = explode("@", $handler, 2);
+        call_user_func_array(array(new $class, $method), $vars);
 
-        $controllerPath = "\\App\\Controller\\";
-        $exec = explode('@', $handler);
-        $controller = $controllerPath . $exec[0];
-        $method = $exec[1];
-
-        $call = new $controller;
-        if (empty($vars)) {
-            $call->$method();
-        } else {
-            $params = implode(',', $vars);
-            $call->$method($params);
-        }
         break;
 }
