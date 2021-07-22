@@ -1,4 +1,4 @@
-#Multiplayer dice game
+# Multiplayer dice game
 This web app is based on the previous pig dice game, but implemeting
 websocket support to allow a game to be played by 2 players on 2 differents
 devices.
