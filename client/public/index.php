@@ -1,5 +1,5 @@
 <?php
-require_once "../vendor/autoload.php";
+require_once __DIR__ . "/../vendor/autoload.php";
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     // Home route
@@ -22,13 +22,13 @@ switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         // ... 404 Not Found
         http_response_code(404);
-        include '../template/errors/404.html';
+        include __DIR__ . '/../template/errors/404.html';
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
         $allowedMethods = $routeInfo[1];
         // ... 405 Method Not Allowed
         http_response_code(405);
-        include '../template/errors/405.html';
+        include __DIR__ . '/../template/errors/405.html';
         break;
     case FastRoute\Dispatcher::FOUND:
         $handler = $routeInfo[1];

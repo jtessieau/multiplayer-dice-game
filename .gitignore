@@ -1,1 +1,4 @@
 .idea
+client/vendor
+server/vendor
+client/composer.json
