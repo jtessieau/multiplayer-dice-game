@@ -1,9 +1,0 @@
--[x] Use cookies to retrieve player in case of connection lost
--[x] Highlight current player in game board
--[x] Delete game if one of the player disconnect
-    -[x] Inform the player that is opponent left
--[x] Pass player name to game board
--[ ] Design a mobile version of the game board
--[x] Add dice animation
--[ ] Upgrade winner display
--[ ] Add game not found message

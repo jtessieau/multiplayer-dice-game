@@ -1,0 +1,17 @@
+{
+  "name": "acronyme/multiplayer-dice-game-client-server",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Julien TESSIEAU",
+      "email": "julien.tessieau@gmail.com"
+    }
+  ],
+  "require": {
+    "cboden/ratchet": "^0.4.3"
+  }
+}
