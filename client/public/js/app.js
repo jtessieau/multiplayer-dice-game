@@ -27,7 +27,7 @@ let game = {
 };
 
 // Homepage elements
-const content = document.querySelector('.content');
+const body = document.querySelector('body');
 
 const displayPlayerName = document.querySelector(".displayPlayerName");
 const inputEditPlayerName = document.querySelector(".inputEditPlayerName");
@@ -110,7 +110,7 @@ inputGameId.addEventListener('keyup', (e) => {
 })
 
 // Game Action
-content.addEventListener('click', (e) => {
+body.addEventListener('click', (e) => {
     e.preventDefault()
 
     // Roll Dice
@@ -145,14 +145,14 @@ content.addEventListener('click', (e) => {
 })
 
 // Charge game board
-const gameboard = document.createElement('div')
+let gameboard;
 fetch('/gameboard').then( async (res) => {
-    gameboard.innerHTML = await res.text()
+    gameboard = await res.text()
 })
 
 function loadGame() {
-    content.innerHTML = '';
-    content.appendChild(gameboard);
+    body.innerHTML = '';
+    body.innerHTML = gameboard;
 }
 
 function updateGame(response) {
@@ -203,8 +203,8 @@ ws.onmessage = (e) => {
 
     if (response.action === "createGame") {
         game.id = response.game.gameId
-        content.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
-        content.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
+        body.innerHTML = '<div class="gameCode">Game code: ' + game.id + '</div>'
+        body.innerHTML += '<div class="waiting">Waiting for the second player ...</div>'
     }
 
     if (response.action === "playerJoin") {

@@ -1,24 +1,19 @@
 <div class="content">
-    <h1>Dice Game</h1>
-    <span class="subh1">Multiplayer</span>
-
-    <div class="landing-controls">
-        <div class="inputPlayerName">
-            <span class="displayPlayerName"></span>
-            <input type="hidden" name="playerName" class="inputEditPlayerName" placeholder="" autocomplete="off">
-            <button class="btnEditPlayerName"><i class="far fa-edit"></i></button>
-        </div>
-
-        <div class="gameLauncher">
-            <div class="btnLauncher">
-                <input type="submit" name="game" value="New Game" id="newGameButton">
-                <input type="submit" name="game" value="Join Game" id="btnJoin">
-            </div>
-
-            <input type="text" name="gameCode" id="inputGameId" placeholder="Enter game code" autocomplete="off">
-        </div>
+    <div class="title">
+        <h1>Dice Game</h1>
+        <span class="subh1">Multiplayer</span>
     </div>
 
+    <div class="editPlayerName">
+        <div id="displayPlayerName">Julien</div>
+        <button id="btnEditPlayerName"><i class="far fa-edit"></i></button>
+    </div>
+
+    <div class="btnLauncher">
+        <button class="btn" id="btnCreateGame">Create Game</button>
+        <button class="btn" id="btnJoinGame">Join Game</button>
+    </div>
 </div>
+
 
 <script src="js/app.js"></script>
