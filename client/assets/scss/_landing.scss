@@ -1,25 +1,45 @@
-h1 {
-  margin: 0;
+.landing {
+  min-height: 100%;
 }
 
-.subh1 {
-  font-style: italic;
-  color: orangered;
+#title {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+    line-height: 100%;
+  }
+
+  .subh1 {
+    position: relative;
+    top: -.4rem;
+
+    font-style: italic;
+    color: orangered;
+  }
 }
 
-.editPlayerName {
-  background-color: red;
+
+#formPlayerName {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto;
-  align-content: center;
+  grid-template-areas:
+    "title title"
+    "name button";
+
+  h2 {
+    font-size: 100%;
+    font-weight: normal;
+  }
 
 
-  #displayPlayerName {
-
+  .displayPlayerName {
+    grid-area: name;
   }
 
   #btnEditPlayerName {
+    grid-area: button;
     border: none;
     background: none;
     margin: 0;
@@ -27,4 +47,7 @@ h1 {
     width: initial;
     height: initial;
   }
+}
+
+#formJoinGame {
 }

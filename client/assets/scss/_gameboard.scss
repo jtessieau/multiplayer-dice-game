@@ -1,6 +1,8 @@
 .gameBoard {
   grid-template-rows: auto;
   align-items: center;
+
+  text-align: center;
 }
 
 .scoreboard {
@@ -24,14 +26,18 @@
   font-size: 64px;
 }
 
+.playerTurn {
+  margin-bottom: 20px;
+}
+
 .playerTurn::before {
   content: "[";
-  margin-left: .2em;
+  margin-right: 1rem;
 }
 
 .playerTurn::after {
   content: "]";
-  margin-right: .2em;
+  margin-left: 1rem;
 }
 
 .playerTurn::before,
@@ -44,6 +50,7 @@
 .stack {
   font-weight: 400;
   margin-bottom: 10px;
+  margin-top: 20px;
 }
 
 .stackDisplay {
@@ -66,8 +73,9 @@
 }
 
 .gameControls button {
-
-  margin: 12px;
+  display: inline-block;
+  margin: 10px;
+  width: 8rem;
 }
 
 .gameControls button:hover {

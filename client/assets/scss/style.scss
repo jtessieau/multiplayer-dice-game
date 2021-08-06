@@ -1,7 +1,14 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+
+/* Imports */
 @import 'reset';
 @import 'landing';
+@import 'gameboard';
+@import 'generic';
 @import 'dice';
 
+/* Styles */
 body {
   background: black url("../images/bg.jpeg") center;
   background-size: cover;
@@ -12,6 +19,12 @@ body {
 
   font-size: 100%;
   color: white;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
 }
 
 .content {
@@ -26,18 +39,6 @@ body {
   font-family: "Montserrat", serif;
   font-weight: 300;
   font-size: 1.2rem;
-}
-
-.btn, {
-  background-color: hsla(0, 0%, 0%, 0.6);
-  border: 1px solid hsl(0, 0%, 100%);
-
-  color: inherit;
-
-  width: 8rem;
-  height: 3rem;
-
-  margin: 1rem;
 }
 
 @media (max-width: 480px) {

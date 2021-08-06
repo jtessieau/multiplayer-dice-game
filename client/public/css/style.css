@@ -1,3 +1,6 @@
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap");
+/* Imports */
 /**
   * This files was initialized thanks to the website:
   * https://piccalil.li/blog/a-modern-css-reset/
@@ -80,29 +83,159 @@ select {
     scroll-behavior: auto !important;
   }
 }
-h1 {
-  margin: 0;
+.landing {
+  min-height: 100%;
 }
 
-.subh1 {
+#title {
+  margin-bottom: 20px;
+}
+#title h1 {
+  margin: 0;
+  line-height: 100%;
+}
+#title .subh1 {
+  position: relative;
+  top: -0.4rem;
   font-style: italic;
   color: orangered;
 }
 
-.editPlayerName {
-  background-color: red;
+#formPlayerName {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto;
-  align-content: center;
+  grid-template-areas: "title title" "name button";
 }
-.editPlayerName #btnEditPlayerName {
+#formPlayerName h2 {
+  font-size: 100%;
+  font-weight: normal;
+}
+#formPlayerName .displayPlayerName {
+  grid-area: name;
+}
+#formPlayerName #btnEditPlayerName {
+  grid-area: button;
   border: none;
   background: none;
   margin: 0;
   padding: 0;
   width: initial;
   height: initial;
+}
+
+.gameBoard {
+  grid-template-rows: auto;
+  align-items: center;
+  text-align: center;
+}
+
+.scoreboard {
+  width: 320px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 45% auto 45%;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 1em 0;
+}
+
+.playerScore {
+  font-size: 64px;
+  font-weight: 400;
+}
+
+.scoreSplitter {
+  font-size: 64px;
+}
+
+.playerTurn {
+  margin-bottom: 20px;
+}
+
+.playerTurn::before {
+  content: "[";
+  margin-right: 1rem;
+}
+
+.playerTurn::after {
+  content: "]";
+  margin-left: 1rem;
+}
+
+.playerTurn::before,
+.playerTurn::after {
+  font-weight: 700;
+  color: black;
+  font-size: 150%;
+}
+
+.stack {
+  font-weight: 400;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.stackDisplay {
+  display: flex;
+  justify-content: center;
+}
+
+.stackDisplay img {
+  transform: translateY(1em);
+}
+
+.stackDisplay img:last-of-type {
+  transform: translateY(1em) scaleX(-1);
+}
+
+.stackValue {
+  font-size: 64px;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+}
+
+.gameControls button {
+  display: inline-block;
+  margin: 10px;
+  width: 8rem;
+}
+
+.gameControls button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #cccccc;
+  font-weight: 400;
+}
+
+.gameControls .btn-wait {
+  width: 312px;
+}
+
+.btn {
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid white;
+  display: block;
+  width: 100%;
+  color: inherit;
+  line-height: 3rem;
+  margin: 1rem 0;
+}
+
+.btn-warning {
+  border: 1px solid red;
+}
+
+.btn-valid {
+  border: 1px solid lime;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
 }
 
 @keyframes wizz {
@@ -263,6 +396,7 @@ h1 {
   transform: translate(2rem, -2.5rem);
 }
 
+/* Styles */
 body {
   background: black url("../images/bg.jpeg") center;
   background-size: cover;
@@ -271,6 +405,12 @@ body {
   align-items: center;
   font-size: 100%;
   color: white;
+}
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
 }
 
 .content {
@@ -282,15 +422,6 @@ body {
   font-family: "Montserrat", serif;
   font-weight: 300;
   font-size: 1.2rem;
-}
-
-.btn {
-  background-color: rgba(0, 0, 0, 0.6);
-  border: 1px solid white;
-  color: inherit;
-  width: 8rem;
-  height: 3rem;
-  margin: 1rem;
 }
 
 @media (max-width: 480px) {

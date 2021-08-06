@@ -1,13 +1,13 @@
-<div class="content">
+<div class="content gameBoard">
     <div class="scoreboard">
         <div class="player">
-            <div class="playerName">Julien</div>
-            <div class="playerScore">53</div>
+            <div class="playerName" id="player1"></div>
+            <div class="playerScore" id="player1Total"></div>
         </div>
         <div class="scoreSplitter">-</div>
         <div class="player">
-            <div class="playerName">Manon</div>
-            <div class="playerScore">72</div>
+            <div class="playerName" id="player2"></div>
+            <div class="playerScore" id="player2Total"></div>
         </div>
     </div>
 
@@ -34,8 +34,8 @@
         </div>
 
         <div class="gameControls">
-            <button>Hold</button>
-            <button>Roll</button>
+            <button class="btn" id="btnHoldScore">Hold</button>
+            <button class="btn" id="btnRollDice">Roll</button>
         </div>
     </div>
 </div>
