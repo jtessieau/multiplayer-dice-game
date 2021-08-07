@@ -52,6 +52,7 @@ class GameServer implements MessageComponentInterface
                     ]
                 ],
                 "diceScore" => 0,
+                "rollDice" => false,
                 "currentPlayer" => rand(0, 1),
                 "winner" => null
             ];
@@ -108,8 +109,8 @@ class GameServer implements MessageComponentInterface
         }
 
         if ($data['action'] === 'rollDice') {
-            // Todo: player roll the dice
             $game = &$this->games[$data['gameId']];
+            $game['rollDice'] = true;
 
             if ($data['playerId'] === $game['players'][$game['currentPlayer']]['id']) {
                 $game['diceScore'] = rand(1, 6);
@@ -138,6 +139,7 @@ class GameServer implements MessageComponentInterface
 
         if ($data['action'] === 'holdScore') {
             $game = &$this->games[$data['gameId']];
+            $game['rollDice'] = false;
             if ($data['playerId'] === $game['players'][$game['currentPlayer']]['id']) {
                 $game['players'][$game['currentPlayer']]['totalScore'] += $game['players'][$game['currentPlayer']]['currentScore'];
                 $game['players'][$game['currentPlayer']]['currentScore'] = 0;
