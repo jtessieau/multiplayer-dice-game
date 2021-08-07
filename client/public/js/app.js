@@ -6,7 +6,7 @@ function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === ' ') {
             c = c.substring(1);
@@ -27,19 +27,25 @@ let game = {
 };
 
 // Homepage elements
+const body = document.querySelector('body');
 const content = document.querySelector('.content');
 
-const displayPlayerName = document.querySelector(".displayPlayerName");
-const inputEditPlayerName = document.querySelector(".inputEditPlayerName");
-const btnEditPlayerName = document.querySelector(".btnEditPlayerName");
+const displayPlayerName = document.querySelector("#displayPlayerName");
+const inputEditPlayerName = document.querySelector("#inputEditPlayer");
+const btnEditPlayerName = document.querySelector("#btnEditPlayerName");
 
-const btnLauncher = document.querySelector('.btnLauncher');
-const btnCreate = document.querySelector('#newGameButton')
+const btnLauncher = document.querySelector('#btnLauncher');
+const btnCreateGame = document.querySelector('#btnCreateGame')
+const btnJoinGame = document.querySelector('#btnJoinGame');
+const inputGameCode = document.querySelector('#inputGameCode');
+
+const formJoinGame = document.querySelector('#formJoinGame');
+const btnCancel = document.querySelector('#btnCancel');
 const btnJoin = document.querySelector('#btnJoin');
-const inputGameId = document.querySelector('#inputGameId');
+const gameNotFoundErrorMessage = document.querySelector('#formJoinGame .form-error')
 
-function escapeHtml(str)
-{
+
+function escapeHtml(str) {
     const map =
         {
             '&': '&amp;',
@@ -48,38 +54,44 @@ function escapeHtml(str)
             '"': '&quot;',
             "'": '&#039;'
         };
-    return str.replace(/[&<>"']/g, function(m) {return map[m];});
+    return str.replace(/[&<>"']/g, function (m) {
+        return map[m];
+    });
 }
 
 // Event listener
 
 // Modify player name
 btnEditPlayerName.addEventListener('click', () => {
-    if (inputEditPlayerName.type === "hidden") {
-        btnEditPlayerName.style.display = "none";
-        inputEditPlayerName.type = "text";
-        inputEditPlayerName.value = player.name;
-        inputEditPlayerName.focus();
-        inputEditPlayerName.select();
-        displayPlayerName.style.display = "none";
-    }
+
+    displayPlayerName.style.display = "none";
+    inputEditPlayerName.style.display = "block";
+    // btnEditPlayerName.innerHTML = "<i class=\"fas fa-check\"></i>"
+    btnEditPlayerName.style.display = 'none';
+
+    inputEditPlayerName.value = player.name;
+    inputEditPlayerName.focus();
+    inputEditPlayerName.select();
 })
 
 inputEditPlayerName.addEventListener('keyup', (e) => {
     if (e.code === "Enter") {
-        player.name = escapeHtml(inputEditPlayerName.value);
-        document.cookie = "playerName="+player.name;
-        inputEditPlayerName.type = "hidden";
-        displayPlayerName.style.display = "inline-block";
-        displayPlayerName.innerText = player.name;
-        btnEditPlayerName.style.display = "inline";
+        if (inputEditPlayerName.value.trim() !== '') {
+            player.name = escapeHtml(inputEditPlayerName.value.trim());
+            document.cookie = "playerName=" + player.name;
+        }
+        displayPlayerName.style.display = "block";
+        btnEditPlayerName.style.display = 'block';
+        displayPlayerName.innerHTML = player.name;
+
+        inputEditPlayerName.style.display = "none";
     }
 })
 
 // Websocket Send action
 
 // Create a new game
-btnCreate.addEventListener('click', (e) => {
+btnCreateGame.addEventListener('click', (e) => {
     e.preventDefault()
     let request = {
         "action": "createGame",
@@ -89,28 +101,31 @@ btnCreate.addEventListener('click', (e) => {
 })
 
 // Join a game
-btnJoin.addEventListener("click", (e) => {
-    btnLauncher.style.display = "none";
-    inputGameId.style.display = "block";
-    inputGameId.focus();
+btnJoinGame.addEventListener("click", (e) => {
+    btnLauncher.classList.add('d-none');
+    formJoinGame.classList.remove('d-none');
+
+    inputGameCode.focus();
 })
 
-inputGameId.addEventListener('keyup', (e) => {
-    if (e.code === "Enter") {
+btnCancel.addEventListener("click", () => {
+    inputGameCode.value = '';
+    gameNotFoundErrorMessage.innerHTML = '';
+    btnLauncher.classList.remove('d-none');
+    formJoinGame.classList.add('d-none');
+})
 
-        let request = {
-            "action": "joinGame",
-            "playerName": player.name,
-            "gameId": escapeHtml(inputGameId.value)
-        }
-
-        ws.send(JSON.stringify(request))
+btnJoin.addEventListener('click', () => {
+    let request = {
+        "action": "joinGame",
+        "playerName": player.name,
+        "gameId": escapeHtml(inputGameCode.value)
     }
-
+    ws.send(JSON.stringify(request))
 })
 
 // Game Action
-content.addEventListener('click', (e) => {
+body.addEventListener('click', (e) => {
     e.preventDefault()
 
     // Roll Dice
@@ -145,33 +160,33 @@ content.addEventListener('click', (e) => {
 })
 
 // Charge game board
-const gameboard = document.createElement('div')
-fetch('/gameboard').then( async (res) => {
-    gameboard.innerHTML = await res.text()
+let gameboard;
+fetch('/gameboard').then(async (res) => {
+    gameboard = await res.text()
 })
 
 function loadGame() {
-    content.innerHTML = '';
-    content.appendChild(gameboard);
+    body.innerHTML = '';
+    body.innerHTML = gameboard;
 }
 
 function updateGame(response) {
+    console.log(response);
     document.querySelector('#dice').className = 'dice' + response.game.diceScore;
 
     document.querySelector('#player1').innerText = response.game.players[0].name;
-    document.querySelector('#player1Current').innerText = response.game.players[0].currentScore;
     document.querySelector('#player1Total').innerText = response.game.players[0].totalScore;
 
     document.querySelector('#player2').innerText = response.game.players[1].name;
-    document.querySelector('#player2Current').innerText = response.game.players[1].currentScore;
     document.querySelector('#player2Total').innerText = response.game.players[1].totalScore;
 
-    if (response.game.currentPlayer === 0) {
-        document.querySelector('#player1').classList.add('active-player');
-        document.querySelector('#player2').classList.remove('active-player');
+    let currentPlayer = response.game.currentPlayer;
+
+    document.querySelector('.stackValue').innerHTML = response.game.players[currentPlayer].currentScore;
+    if (response.game.players[currentPlayer].id === player.id) {
+        document.querySelector('.playerTurn').innerHTML = 'Your Turn';
     } else {
-        document.querySelector('#player1').classList.remove('active-player');
-        document.querySelector('#player2').classList.add('active-player');
+        document.querySelector('.playerTurn').innerHTML = 'Opponent Turn';
     }
 
 }
@@ -194,9 +209,9 @@ ws.onmessage = (e) => {
 
     if (response.action === "playerId") {
         player.id = response.playerId;
-        if(player.name === '') {
+        if (player.name === '') {
             player.name = "Player" + player.id;
-            document.cookie = "playerName="+player.name;
+            document.cookie = "playerName=" + player.name;
         }
         displayPlayerName.innerHTML = player.name;
     }
@@ -221,7 +236,7 @@ ws.onmessage = (e) => {
             updateGame(response);
 
         } else {
-            // Todo: Game not found
+            gameNotFoundErrorMessage.innerHTML = "Game not found";
         }
     }
 

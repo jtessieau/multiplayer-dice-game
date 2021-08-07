@@ -1,29 +1,49 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+
+/* Imports */
 @import 'reset';
 @import 'landing';
+@import 'gameboard';
+@import 'generic';
 @import 'dice';
 
+/* Styles */
 body {
-  background: url("../images/bg.jpeg") center;
+  background: black url("../images/bg.jpeg") center;
   background-size: cover;
-  color: white;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  font-size: 100%;
+  color: white;
 }
-.playerName {
-  font-size: 3rem;
-  font-weight: lighter;
+
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
 }
-.active-player {
-  font-weight: normal;
+
+.content {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  color: hsl(0, 0%, 100%);
+
+  width: calc(100vw - 4rem);
+  min-height: calc(100vh - 4rem);
+
+  padding: 0.7rem;
+
+  font-family: "Montserrat", serif;
+  font-weight: 300;
+  font-size: 1.2rem;
 }
-.active-player::after {
-  content: "";
-  margin-left: 1rem;
-  margin-bottom: 0.3rem;
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  background-color: red;
-  border-radius: 50%;
+
+@media (max-width: 480px) {
+  .content {
+    width: calc(100vw - 2rem);
+    min-height: calc(100vh - 2rem);
+  }
 }

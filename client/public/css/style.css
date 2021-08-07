@@ -1,20 +1,66 @@
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap");
+/* Imports */
+/**
+  * This files was initialized thanks to the website:
+  * https://piccalil.li/blog/a-modern-css-reset/
+  *
+  * But customized for my usage.
+  */
+/* Box sizing rules */
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Set core root defaults */
 html:focus-within {
   scroll-behavior: smooth;
 }
 
+/* Set core body defaults */
 body {
   min-height: 100vh;
+  text-rendering: optimizeSpeed;
   line-height: 1.5;
 }
 
+/* A elements */
+a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
 input,
 button,
 textarea,
@@ -22,62 +68,170 @@ select {
   font: inherit;
 }
 
-.content {
-  width: 90vw;
-  min-height: 80vh;
-  padding: 60px;
-  background-color: rgba(0, 0, 0, 0.6);
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+*::before,
+*::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+.landing {
+  max-width: 500px;
+  margin: auto;
 }
 
-h1 {
+#title {
+  margin-bottom: 20px;
+}
+#title h1 {
   margin: 0;
+  line-height: 100%;
 }
-
-.subh1 {
+#title .subh1 {
+  position: relative;
+  top: -0.4rem;
   font-style: italic;
   color: orangered;
 }
 
-.landing-controls {
-  width: 100%;
+#formPlayerName {
+  margin-bottom: 50px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+#formPlayerName .displayPlayerName {
+  padding: 0.5rem 1rem;
+}
+#formPlayerName #btnEditPlayerName {
+  color: inherit;
+  border: none;
+  background: none;
+  margin: 0;
+  padding: 0;
+  width: initial;
+  height: initial;
+}
+
+.gameBoard {
+  grid-template-rows: auto;
+  align-items: center;
   text-align: center;
 }
 
-.inputPlayerName {
-  margin: 12% auto 2rem;
-  font-size: 3rem;
+.scoreboard {
+  width: 320px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 45% auto 45%;
+  justify-content: center;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 1em 0;
 }
-.inputPlayerName span, .inputPlayerName input {
-  text-align: center;
+
+.playerScore {
+  font-size: 64px;
+  font-weight: 400;
 }
-.inputPlayerName input {
-  background-color: rgba(128, 128, 128, 0.4);
-  color: white;
+
+.scoreSplitter {
+  font-size: 64px;
 }
-.inputPlayerName .btnEditPlayerName {
-  background: none;
-  border: none;
-  outline: none;
-  color: inherit;
+
+.playerTurn {
+  margin-bottom: 20px;
+}
+
+.playerTurn::before {
+  content: "[";
+  margin-right: 1rem;
+}
+
+.playerTurn::after {
+  content: "]";
   margin-left: 1rem;
 }
 
-.gameLauncher #inputGameId {
-  width: 100%;
-  display: none;
-  padding: 0.5rem;
-  color: white;
-  font-size: 1.5rem;
-  text-align: center;
-  background-color: rgba(128, 128, 128, 0.4);
+.playerTurn::before,
+.playerTurn::after {
+  font-weight: 700;
+  color: black;
+  font-size: 150%;
 }
-.gameLauncher .btnLauncher input {
-  font-size: 1.5rem;
-  padding: 0.5rem 2rem;
-  border-radius: 1rem;
-  margin: 2rem;
-  color: white;
-  background-color: rgba(128, 128, 128, 0.2);
+
+.stack {
+  font-weight: 400;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.stackDisplay {
+  display: flex;
+  justify-content: center;
+}
+
+.stackDisplay img {
+  transform: translateY(1em);
+}
+
+.stackDisplay img:last-of-type {
+  transform: translateY(1em) scaleX(-1);
+}
+
+.stackValue {
+  font-size: 64px;
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+}
+
+.gameControls button {
+  display: inline-block;
+  margin: 10px;
+  width: 8rem;
+}
+
+.gameControls button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #cccccc;
+  font-weight: 400;
+}
+
+.gameControls .btn-wait {
+  width: 312px;
+}
+
+.btn {
+  background-color: rgba(0, 0, 0, 0.6);
+  border: 1px solid white;
+  display: block;
+  width: 100%;
+  color: inherit;
+  line-height: 3rem;
+  margin: 1rem 0;
+}
+
+.btn-warning {
+  border: 1px solid red;
+}
+
+.btn-valid {
+  border: 1px solid lime;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
 }
 
 @keyframes wizz {
@@ -238,33 +392,39 @@ h1 {
   transform: translate(2rem, -2.5rem);
 }
 
+/* Styles */
 body {
-  background: url("../images/bg.jpeg") center;
+  background: black url("../images/bg.jpeg") center;
   background-size: cover;
-  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 100%;
+  color: white;
 }
 
-.playerName {
-  font-size: 3rem;
-  font-weight: lighter;
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
 }
 
-.active-player {
-  font-weight: normal;
+.content {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  width: calc(100vw - 4rem);
+  min-height: calc(100vh - 4rem);
+  padding: 0.7rem;
+  font-family: "Montserrat", serif;
+  font-weight: 300;
+  font-size: 1.2rem;
 }
 
-.active-player::after {
-  content: "";
-  margin-left: 1rem;
-  margin-bottom: 0.3rem;
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  background-color: red;
-  border-radius: 50%;
+@media (max-width: 480px) {
+  .content {
+    width: calc(100vw - 2rem);
+    min-height: calc(100vh - 2rem);
+  }
 }
 
 /*# sourceMappingURL=style.css.map */

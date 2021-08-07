@@ -1,24 +1,39 @@
 <div class="content">
-    <h1>Dice Game</h1>
-    <span class="subh1">Multiplayer</span>
+    <div class="landing">
 
-    <div class="landing-controls">
-        <div class="inputPlayerName">
-            <span class="displayPlayerName"></span>
-            <input type="hidden" name="playerName" class="inputEditPlayerName" placeholder="" autocomplete="off">
-            <button class="btnEditPlayerName"><i class="far fa-edit"></i></button>
+        <div id="title">
+            <h1>Dice Game</h1>
+            <p class="subh1">Multiplayer</p>
         </div>
 
-        <div class="gameLauncher">
-            <div class="btnLauncher">
-                <input type="submit" name="game" value="New Game" id="newGameButton">
-                <input type="submit" name="game" value="Join Game" id="btnJoin">
-            </div>
+        <!-- Edit Player Name -->
+        <div id="formPlayerName">
+            <div class="displayPlayerName" id="displayPlayerName">Julien</div>
+            <input
+                    type="text"
+                    class="d-none"
+                    id="inputEditPlayer"
+                    autocomplete="off"
+            />
+            <button id="btnEditPlayerName"><i class="far fa-edit"></i></button>
+        </div>
 
-            <input type="text" name="gameCode" id="inputGameId" placeholder="Enter game code" autocomplete="off">
+        <!-- Launcher buttons -->
+        <div id ="btnLauncher">
+            <button class="btn" id="btnCreateGame">Create Game</button>
+            <button class="btn" id="btnJoinGame">Join Game</button>
+        </div>
+
+        <!-- Join Game -->
+        <div id="formJoinGame" class="d-none">
+            <input type="text" id="inputGameCode" placeholder="Enter game code ...">
+            <button class="btn btn-warning" id="btnCancel">Cancel</button>
+            <button class="btn btn-valid" id="btnJoin">Join</button>
+            <span class="form-error"></span>
         </div>
     </div>
 
 </div>
+
 
 <script src="js/app.js"></script>
