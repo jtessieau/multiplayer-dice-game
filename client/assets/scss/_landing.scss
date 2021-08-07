@@ -1,5 +1,7 @@
 .landing {
-  min-height: 100%;
+  max-width: 500px;
+  margin: auto;
+
 }
 
 #title {
@@ -21,25 +23,17 @@
 
 
 #formPlayerName {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas:
-    "title title"
-    "name button";
-
-  h2 {
-    font-size: 100%;
-    font-weight: normal;
-  }
 
 
   .displayPlayerName {
-    grid-area: name;
+    padding: 0.5rem 1rem;
   }
 
   #btnEditPlayerName {
-    grid-area: button;
+    color:inherit;
     border: none;
     background: none;
     margin: 0;

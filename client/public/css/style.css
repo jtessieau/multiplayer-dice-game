@@ -84,7 +84,8 @@ select {
   }
 }
 .landing {
-  min-height: 100%;
+  max-width: 500px;
+  margin: auto;
 }
 
 #title {
@@ -102,20 +103,15 @@ select {
 }
 
 #formPlayerName {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas: "title title" "name button";
-}
-#formPlayerName h2 {
-  font-size: 100%;
-  font-weight: normal;
 }
 #formPlayerName .displayPlayerName {
-  grid-area: name;
+  padding: 0.5rem 1rem;
 }
 #formPlayerName #btnEditPlayerName {
-  grid-area: button;
+  color: inherit;
   border: none;
   background: none;
   margin: 0;

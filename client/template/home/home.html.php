@@ -8,9 +8,13 @@
 
         <!-- Edit Player Name -->
         <div id="formPlayerName">
-            <h2>Player Name :</h2>
             <div class="displayPlayerName" id="displayPlayerName">Julien</div>
-            <input type="text" class="displayPlayerName d-none"  id="inputEditPlayerName" placeholder="Enter player name ...">
+            <input
+                    type="text"
+                    class="d-none"
+                    id="inputEditPlayer"
+                    autocomplete="off"
+            />
             <button id="btnEditPlayerName"><i class="far fa-edit"></i></button>
         </div>
 
