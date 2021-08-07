@@ -29,6 +29,7 @@
             <input type="text" id="inputGameCode" placeholder="Enter game code ...">
             <button class="btn btn-warning" id="btnCancel">Cancel</button>
             <button class="btn btn-valid" id="btnJoin">Join</button>
+            <span class="form-error"></span>
         </div>
     </div>
 

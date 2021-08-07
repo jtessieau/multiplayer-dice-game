@@ -42,6 +42,8 @@ const inputGameCode = document.querySelector('#inputGameCode');
 const formJoinGame = document.querySelector('#formJoinGame');
 const btnCancel = document.querySelector('#btnCancel');
 const btnJoin = document.querySelector('#btnJoin');
+const gameNotFoundErrorMessage = document.querySelector('#formJoinGame .form-error')
+
 
 function escapeHtml(str) {
     const map =
@@ -108,6 +110,7 @@ btnJoinGame.addEventListener("click", (e) => {
 
 btnCancel.addEventListener("click", () => {
     inputGameCode.value = '';
+    gameNotFoundErrorMessage.innerHTML = '';
     btnLauncher.classList.remove('d-none');
     formJoinGame.classList.add('d-none');
 })
@@ -233,7 +236,7 @@ ws.onmessage = (e) => {
             updateGame(response);
 
         } else {
-            // Todo: Game not found
+            gameNotFoundErrorMessage.innerHTML = "Game not found";
         }
     }
 
