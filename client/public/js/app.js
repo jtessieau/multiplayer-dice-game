@@ -1,7 +1,44 @@
 // Connect to websocket
 const ws = new WebSocket('ws://localhost:8080')
 
-// Player Id
+/* DOM Elements */
+
+// Container
+const body = document.querySelector('body');
+const content = document.querySelector('.content');
+
+// Form player name
+const displayPlayerName = document.querySelector("#displayPlayerName");
+const inputEditPlayerName = document.querySelector("#inputEditPlayer");
+const btnEditPlayerName = document.querySelector("#btnEditPlayerName");
+
+// Launcher button
+const btnLauncher = document.querySelector('#btnLauncher');
+const btnCreateGame = document.querySelector('#btnCreateGame')
+const btnJoinGame = document.querySelector('#btnJoinGame');
+const inputGameCode = document.querySelector('#inputGameCode');
+
+// Form join game
+const formJoinGame = document.querySelector('#formJoinGame');
+const btnCancel = document.querySelector('#btnCancel');
+const btnJoin = document.querySelector('#btnJoin');
+const gameNotFoundErrorMessage = document.querySelector('#formJoinGame .form-error')
+
+/* Globals functions */
+function escapeHtml(str) {
+    const map =
+        {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+    return str.replace(/[&<>"']/g, function (m) {
+        return map[m];
+    });
+}
+
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -18,48 +55,17 @@ function getCookie(cname) {
     return "";
 }
 
+/* Player and Game statement */
 let player = {
     "id": '',
     "name": getCookie("playerName")
 };
+
 let game = {
     "id": ''
 };
 
-// Homepage elements
-const body = document.querySelector('body');
-const content = document.querySelector('.content');
-
-const displayPlayerName = document.querySelector("#displayPlayerName");
-const inputEditPlayerName = document.querySelector("#inputEditPlayer");
-const btnEditPlayerName = document.querySelector("#btnEditPlayerName");
-
-const btnLauncher = document.querySelector('#btnLauncher');
-const btnCreateGame = document.querySelector('#btnCreateGame')
-const btnJoinGame = document.querySelector('#btnJoinGame');
-const inputGameCode = document.querySelector('#inputGameCode');
-
-const formJoinGame = document.querySelector('#formJoinGame');
-const btnCancel = document.querySelector('#btnCancel');
-const btnJoin = document.querySelector('#btnJoin');
-const gameNotFoundErrorMessage = document.querySelector('#formJoinGame .form-error')
-
-
-function escapeHtml(str) {
-    const map =
-        {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-    return str.replace(/[&<>"']/g, function (m) {
-        return map[m];
-    });
-}
-
-// Event listener
+/* Homepage Events */
 
 // Modify player name
 btnEditPlayerName.addEventListener('click', () => {
@@ -87,8 +93,6 @@ inputEditPlayerName.addEventListener('keyup', (e) => {
         inputEditPlayerName.style.display = "none";
     }
 })
-
-// Websocket Send action
 
 // Create a new game
 btnCreateGame.addEventListener('click', (e) => {
@@ -171,7 +175,6 @@ function loadGame() {
 }
 
 function updateGame(response) {
-    console.log(response);
     document.querySelector('#dice').className = 'dice' + response.game.diceScore;
 
     document.querySelector('#player1').innerText = response.game.players[0].name;
@@ -187,6 +190,13 @@ function updateGame(response) {
         document.querySelector('.playerTurn').innerHTML = 'Your Turn';
     } else {
         document.querySelector('.playerTurn').innerHTML = 'Opponent Turn';
+    }
+
+    // Animate dice
+    if (response.game.rollDice === true) {
+        document.querySelector('#dice').classList.remove("animateDice")
+        void document.querySelector('#dice').offsetWidth // To reset animation
+        document.querySelector('#dice').classList.add("animateDice")
     }
 
 }
@@ -242,9 +252,6 @@ ws.onmessage = (e) => {
 
     if (response.action === "updateGameBoard") {
         updateGame(response);
-        document.querySelector('#dice').classList.remove("animateDice")
-        void document.querySelector('#dice').offsetWidth // To reset animation
-        document.querySelector('#dice').classList.add("animateDice")
 
         if (response.game.winner !== null) {
 
